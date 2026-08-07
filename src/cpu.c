@@ -5,6 +5,13 @@
 
 cpu_s cpu;
 
+u8 fetch_byte(void) { return read_mem(cpu.pc++); }
+u16 fetch_word(void) {
+    u8 lo = fetch_byte();
+    u8 hi = fetch_byte();
+    return (hi << 8) | lo;
+}
+
 void write_r8_operand(u8 code, u8 val) {
     switch (code) {
         case 0:
@@ -66,7 +73,7 @@ const instruction_s instruction_table[256] = {
     [0x03] = {"", 0, 0, unimplemented},
     [0x04] = {"", 0, 0, unimplemented},
     [0x05] = {"", 0, 0, unimplemented},
-    [0x06] = {"", 0, 0, unimplemented},
+    [0x06] = {"LD B, n8", 2, 2, ld_r8_n8},
     [0x07] = {"", 0, 0, unimplemented},
     [0x08] = {"", 0, 0, unimplemented},
     [0x09] = {"", 0, 0, unimplemented},
@@ -74,7 +81,7 @@ const instruction_s instruction_table[256] = {
     [0x0b] = {"", 0, 0, unimplemented},
     [0x0c] = {"", 0, 0, unimplemented},
     [0x0d] = {"", 0, 0, unimplemented},
-    [0x0e] = {"", 0, 0, unimplemented},
+    [0x0e] = {"LD C, n8", 2, 2, ld_r8_n8},
     [0x0f] = {"", 0, 0, unimplemented},
     [0x10] = {"", 0, 0, unimplemented},
     [0x11] = {"", 0, 0, unimplemented},
@@ -82,7 +89,7 @@ const instruction_s instruction_table[256] = {
     [0x13] = {"", 0, 0, unimplemented},
     [0x14] = {"", 0, 0, unimplemented},
     [0x15] = {"", 0, 0, unimplemented},
-    [0x16] = {"", 0, 0, unimplemented},
+    [0x16] = {"LD D, n8", 2, 2, ld_r8_n8},
     [0x17] = {"", 0, 0, unimplemented},
     [0x18] = {"", 0, 0, unimplemented},
     [0x19] = {"", 0, 0, unimplemented},
@@ -90,7 +97,7 @@ const instruction_s instruction_table[256] = {
     [0x1b] = {"", 0, 0, unimplemented},
     [0x1c] = {"", 0, 0, unimplemented},
     [0x1d] = {"", 0, 0, unimplemented},
-    [0x1e] = {"", 0, 0, unimplemented},
+    [0x1e] = {"LD E, n8", 2, 2, ld_r8_n8},
     [0x1f] = {"", 0, 0, unimplemented},
     [0x20] = {"", 0, 0, unimplemented},
     [0x21] = {"", 0, 0, unimplemented},
@@ -98,7 +105,7 @@ const instruction_s instruction_table[256] = {
     [0x23] = {"", 0, 0, unimplemented},
     [0x24] = {"", 0, 0, unimplemented},
     [0x25] = {"", 0, 0, unimplemented},
-    [0x26] = {"", 0, 0, unimplemented},
+    [0x26] = {"LD H, n8", 2, 2, ld_r8_n8},
     [0x27] = {"", 0, 0, unimplemented},
     [0x28] = {"", 0, 0, unimplemented},
     [0x29] = {"", 0, 0, unimplemented},
@@ -106,7 +113,7 @@ const instruction_s instruction_table[256] = {
     [0x2b] = {"", 0, 0, unimplemented},
     [0x2c] = {"", 0, 0, unimplemented},
     [0x2d] = {"", 0, 0, unimplemented},
-    [0x2e] = {"", 0, 0, unimplemented},
+    [0x2e] = {"LD L, n8", 2, 2, ld_r8_n8},
     [0x2f] = {"", 0, 0, unimplemented},
     [0x30] = {"", 0, 0, unimplemented},
     [0x31] = {"", 0, 0, unimplemented},
@@ -114,7 +121,7 @@ const instruction_s instruction_table[256] = {
     [0x33] = {"", 0, 0, unimplemented},
     [0x34] = {"", 0, 0, unimplemented},
     [0x35] = {"", 0, 0, unimplemented},
-    [0x36] = {"", 0, 0, unimplemented},
+    [0x36] = {"LD (HL), n8", 2, 2, ld_r8_n8},
     [0x37] = {"", 0, 0, unimplemented},
     [0x38] = {"", 0, 0, unimplemented},
     [0x39] = {"", 0, 0, unimplemented},
@@ -122,7 +129,7 @@ const instruction_s instruction_table[256] = {
     [0x3b] = {"", 0, 0, unimplemented},
     [0x3c] = {"", 0, 0, unimplemented},
     [0x3d] = {"", 0, 0, unimplemented},
-    [0x3e] = {"", 0, 0, unimplemented},
+    [0x3e] = {"LD A, n8", 2, 2, ld_r8_n8},
     [0x3f] = {"", 0, 0, unimplemented},
     [0x40] = {"LD B, B",    1, 1, ld_r8_r8},
     [0x41] = {"LD B, C",    1, 1, ld_r8_r8},

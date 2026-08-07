@@ -30,6 +30,9 @@ extern const instruction_s instruction_table[256];
 extern const instruction_s bit_shift_instruction_table[8];
 extern const instruction_s bit_flag_instruction_table[4];
 
+u8 fetch_byte(void);
+u16 fetch_word(void);
+
 void write_r8_operand(u8 code, u8 val);
 u8 read_r8_operand(u8 code);
 
@@ -39,3 +42,4 @@ void unimplemented(void);
 void noop(void);
 
 void ld_r8_r8(void);
+void ld_r8_n8(void);
