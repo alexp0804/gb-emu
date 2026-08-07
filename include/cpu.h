@@ -36,6 +36,7 @@ typedef struct reg {
 typedef struct cpu {
     reg_s reg;
     u8 sp, pc;
+    u8 opcode;
 } cpu_s;
 
 extern cpu_s cpu;

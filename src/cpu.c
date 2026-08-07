@@ -1,8 +1,62 @@
 #include "cpu.h"
 
 #include "cpu_impl.h"
+#include "mem.h"
 
 cpu_s cpu;
+
+void write_r8_operand(u8 code, u8 val) {
+    switch (code) {
+        case 0:
+            cpu.reg.b = val;
+            return;
+        case 1:
+            cpu.reg.c = val;
+            return;
+        case 2:
+            cpu.reg.d = val;
+            return;
+        case 3:
+            cpu.reg.e = val;
+            return;
+        case 4:
+            cpu.reg.h = val;
+            return;
+        case 5:
+            cpu.reg.l = val;
+            return;
+        case 6:
+            write_mem(cpu.reg.hl, val);
+            return;
+        case 7:
+            cpu.reg.a = val;
+            return;
+    }
+    printf("Invalid write to r8 operand.\n");
+    exit(1);
+}
+u8 read_r8_operand(u8 code) {
+    switch (code) {
+        case 0:
+            return cpu.reg.b;
+        case 1:
+            return cpu.reg.c;
+        case 2:
+            return cpu.reg.d;
+        case 3:
+            return cpu.reg.e;
+        case 4:
+            return cpu.reg.h;
+        case 5:
+            return cpu.reg.l;
+        case 6:
+            return read_mem(cpu.reg.hl);
+        case 7:
+            return cpu.reg.a;
+    }
+    printf("Invalid read of r8 operand.\n");
+    exit(1);
+}
 
 // clang-format off
 const instruction_s instruction_table[256] = {
@@ -70,70 +124,70 @@ const instruction_s instruction_table[256] = {
     [0x3d] = {"", 0, 0, unimplemented},
     [0x3e] = {"", 0, 0, unimplemented},
     [0x3f] = {"", 0, 0, unimplemented},
-    [0x40] = {"", 0, 0, unimplemented},
-    [0x41] = {"", 0, 0, unimplemented},
-    [0x42] = {"", 0, 0, unimplemented},
-    [0x43] = {"", 0, 0, unimplemented},
-    [0x44] = {"", 0, 0, unimplemented},
-    [0x45] = {"", 0, 0, unimplemented},
-    [0x46] = {"", 0, 0, unimplemented},
-    [0x47] = {"", 0, 0, unimplemented},
-    [0x48] = {"", 0, 0, unimplemented},
-    [0x49] = {"", 0, 0, unimplemented},
-    [0x4a] = {"", 0, 0, unimplemented},
-    [0x4b] = {"", 0, 0, unimplemented},
-    [0x4c] = {"", 0, 0, unimplemented},
-    [0x4d] = {"", 0, 0, unimplemented},
-    [0x4e] = {"", 0, 0, unimplemented},
-    [0x4f] = {"", 0, 0, unimplemented},
-    [0x50] = {"", 0, 0, unimplemented},
-    [0x51] = {"", 0, 0, unimplemented},
-    [0x52] = {"", 0, 0, unimplemented},
-    [0x53] = {"", 0, 0, unimplemented},
-    [0x54] = {"", 0, 0, unimplemented},
-    [0x55] = {"", 0, 0, unimplemented},
-    [0x56] = {"", 0, 0, unimplemented},
-    [0x57] = {"", 0, 0, unimplemented},
-    [0x58] = {"", 0, 0, unimplemented},
-    [0x59] = {"", 0, 0, unimplemented},
-    [0x5a] = {"", 0, 0, unimplemented},
-    [0x5b] = {"", 0, 0, unimplemented},
-    [0x5c] = {"", 0, 0, unimplemented},
-    [0x5d] = {"", 0, 0, unimplemented},
-    [0x5e] = {"", 0, 0, unimplemented},
-    [0x5f] = {"", 0, 0, unimplemented},
-    [0x60] = {"", 0, 0, unimplemented},
-    [0x61] = {"", 0, 0, unimplemented},
-    [0x62] = {"", 0, 0, unimplemented},
-    [0x63] = {"", 0, 0, unimplemented},
-    [0x64] = {"", 0, 0, unimplemented},
-    [0x65] = {"", 0, 0, unimplemented},
-    [0x66] = {"", 0, 0, unimplemented},
-    [0x67] = {"", 0, 0, unimplemented},
-    [0x68] = {"", 0, 0, unimplemented},
-    [0x69] = {"", 0, 0, unimplemented},
-    [0x6a] = {"", 0, 0, unimplemented},
-    [0x6b] = {"", 0, 0, unimplemented},
-    [0x6c] = {"", 0, 0, unimplemented},
-    [0x6d] = {"", 0, 0, unimplemented},
-    [0x6e] = {"", 0, 0, unimplemented},
-    [0x6f] = {"", 0, 0, unimplemented},
-    [0x70] = {"", 0, 0, unimplemented},
-    [0x71] = {"", 0, 0, unimplemented},
-    [0x72] = {"", 0, 0, unimplemented},
-    [0x73] = {"", 0, 0, unimplemented},
-    [0x74] = {"", 0, 0, unimplemented},
-    [0x75] = {"", 0, 0, unimplemented},
-    [0x76] = {"", 0, 0, unimplemented},
-    [0x77] = {"", 0, 0, unimplemented},
-    [0x78] = {"", 0, 0, unimplemented},
-    [0x79] = {"", 0, 0, unimplemented},
-    [0x7a] = {"", 0, 0, unimplemented},
-    [0x7b] = {"", 0, 0, unimplemented},
-    [0x7c] = {"", 0, 0, unimplemented},
-    [0x7d] = {"", 0, 0, unimplemented},
-    [0x7e] = {"", 0, 0, unimplemented},
-    [0x7f] = {"", 0, 0, unimplemented},
+    [0x40] = {"LD B, B",    1, 1, ld_r8_r8},
+    [0x41] = {"LD B, C",    1, 1, ld_r8_r8},
+    [0x42] = {"LD B, D",    1, 1, ld_r8_r8},
+    [0x43] = {"LD B, E",    1, 1, ld_r8_r8},
+    [0x44] = {"LD B, H",    1, 1, ld_r8_r8},
+    [0x45] = {"LD B, L",    1, 1, ld_r8_r8},
+    [0x46] = {"LD B, (HL)", 1, 2, ld_r8_r8},
+    [0x47] = {"LD B, A",    1, 1, ld_r8_r8},
+    [0x48] = {"LD C, B",    1, 1, ld_r8_r8},
+    [0x49] = {"LD C, C",    1, 1, ld_r8_r8},
+    [0x4a] = {"LD C, D",    1, 1, ld_r8_r8},
+    [0x4b] = {"LD C, E",    1, 1, ld_r8_r8},
+    [0x4c] = {"LD C, H",    1, 1, ld_r8_r8},
+    [0x4d] = {"LD C, L",    1, 1, ld_r8_r8},
+    [0x4e] = {"LD C, (HL)", 1, 2, ld_r8_r8},
+    [0x4f] = {"LD C, A",    1, 1, ld_r8_r8},
+    [0x50] = {"LD D, B",    1, 1, ld_r8_r8},
+    [0x51] = {"LD D, C",    1, 1, ld_r8_r8},
+    [0x52] = {"LD D, D",    1, 1, ld_r8_r8},
+    [0x53] = {"LD D, E",    1, 1, ld_r8_r8},
+    [0x54] = {"LD D, H",    1, 1, ld_r8_r8},
+    [0x55] = {"LD D, L",    1, 1, ld_r8_r8},
+    [0x56] = {"LD D, (HL)", 1, 2, ld_r8_r8},
+    [0x57] = {"LD D, A",    1, 1, ld_r8_r8},
+    [0x58] = {"LD E, B",    1, 1, ld_r8_r8},
+    [0x59] = {"LD E, C",    1, 1, ld_r8_r8},
+    [0x5a] = {"LD E, D",    1, 1, ld_r8_r8},
+    [0x5b] = {"LD E, E",    1, 1, ld_r8_r8},
+    [0x5c] = {"LD E, H",    1, 1, ld_r8_r8},
+    [0x5d] = {"LD E, L",    1, 1, ld_r8_r8},
+    [0x5e] = {"LD E, (HL)", 1, 2, ld_r8_r8},
+    [0x5f] = {"LD E, A",    1, 1, ld_r8_r8},
+    [0x60] = {"LD H, B",    1, 1, ld_r8_r8},
+    [0x61] = {"LD H, C",    1, 1, ld_r8_r8},
+    [0x62] = {"LD H, D",    1, 1, ld_r8_r8},
+    [0x63] = {"LD H, E",    1, 1, ld_r8_r8},
+    [0x64] = {"LD H, H",    1, 1, ld_r8_r8},
+    [0x65] = {"LD H, L",    1, 1, ld_r8_r8},
+    [0x66] = {"LD H, (HL)", 1, 2, ld_r8_r8},
+    [0x67] = {"LD H, A",    1, 1, ld_r8_r8},
+    [0x68] = {"LD L, B",    1, 1, ld_r8_r8},
+    [0x69] = {"LD L, C",    1, 1, ld_r8_r8},
+    [0x6a] = {"LD L, D",    1, 1, ld_r8_r8},
+    [0x6b] = {"LD L, E",    1, 1, ld_r8_r8},
+    [0x6c] = {"LD L, H",    1, 1, ld_r8_r8},
+    [0x6d] = {"LD L, L",    1, 1, ld_r8_r8},
+    [0x6e] = {"LD L, (HL)", 1, 2, ld_r8_r8},
+    [0x6f] = {"LD L, A",    1, 1, ld_r8_r8},
+    [0x70] = {"LD (HL), B", 1, 2, ld_r8_r8},
+    [0x71] = {"LD (HL), C", 1, 2, ld_r8_r8},
+    [0x72] = {"LD (HL), D", 1, 2, ld_r8_r8},
+    [0x73] = {"LD (HL), E", 1, 2, ld_r8_r8},
+    [0x74] = {"LD (HL), H", 1, 2, ld_r8_r8},
+    [0x75] = {"LD (HL), L", 1, 2, ld_r8_r8},
+    [0x76] = {"halt", 0, 0, unimplemented},
+    [0x77] = {"LD (HL), A", 1, 2, ld_r8_r8},
+    [0x78] = {"LD A, B",    1, 1, ld_r8_r8},
+    [0x79] = {"LD A, C",    1, 1, ld_r8_r8},
+    [0x7a] = {"LD A, D",    1, 1, ld_r8_r8},
+    [0x7b] = {"LD A, E",    1, 1, ld_r8_r8},
+    [0x7c] = {"LD A, H",    1, 1, ld_r8_r8},
+    [0x7d] = {"LD A, L",    1, 1, ld_r8_r8},
+    [0x7e] = {"LD A, (HL)", 1, 2, ld_r8_r8},
+    [0x7f] = {"LD A, A",    1, 1, ld_r8_r8},
     [0x80] = {"", 0, 0, unimplemented},
     [0x81] = {"", 0, 0, unimplemented},
     [0x82] = {"", 0, 0, unimplemented},
