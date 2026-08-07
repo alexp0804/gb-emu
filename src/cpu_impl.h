@@ -35,6 +35,8 @@ u16 fetch_word(void);
 
 void write_r8_operand(u8 code, u8 val);
 u8 read_r8_operand(u8 code);
+void write_r16_operand(u8 code, u16 val);
+u16 read_r16_operand(u8 code);
 
 instruction_s decode_opcode(void);
 
@@ -43,3 +45,4 @@ void noop(void);
 
 void ld_r8_r8(void);
 void ld_r8_n8(void);
+void ld_r16_n16(void);

@@ -64,11 +64,29 @@ u8 read_r8_operand(u8 code) {
     printf("Invalid read of r8 operand.\n");
     exit(1);
 }
+void write_r16_operand(u8 code, u16 val) {
+    switch (code) {
+        case 0:
+            cpu.reg.bc = val;
+            return;
+        case 1:
+            cpu.reg.de = val;
+            return;
+        case 2:
+            cpu.reg.hl = val;
+            return;
+        case 3:
+            cpu.reg.sp = val;
+            return;
+    }
+    printf("Invalid write to r16 operand.\n");
+    exit(1);
+}
 
 // clang-format off
 const instruction_s instruction_table[256] = {
     [0x00] = {"nop", 0, 0, noop},       
-    [0x01] = {"", 0, 0, unimplemented},
+    [0x01] = {"LD BC, n16", 3, 3, ld_r16_n16},
     [0x02] = {"", 0, 0, unimplemented},
     [0x03] = {"", 0, 0, unimplemented},
     [0x04] = {"", 0, 0, unimplemented},
@@ -84,7 +102,7 @@ const instruction_s instruction_table[256] = {
     [0x0e] = {"LD C, n8", 2, 2, ld_r8_n8},
     [0x0f] = {"", 0, 0, unimplemented},
     [0x10] = {"", 0, 0, unimplemented},
-    [0x11] = {"", 0, 0, unimplemented},
+    [0x11] = {"LD DE, n16", 3, 3, ld_r16_n16},
     [0x12] = {"", 0, 0, unimplemented},
     [0x13] = {"", 0, 0, unimplemented},
     [0x14] = {"", 0, 0, unimplemented},
@@ -100,7 +118,7 @@ const instruction_s instruction_table[256] = {
     [0x1e] = {"LD E, n8", 2, 2, ld_r8_n8},
     [0x1f] = {"", 0, 0, unimplemented},
     [0x20] = {"", 0, 0, unimplemented},
-    [0x21] = {"", 0, 0, unimplemented},
+    [0x21] = {"LD HL, n16", 3, 3, ld_r16_n16},
     [0x22] = {"", 0, 0, unimplemented},
     [0x23] = {"", 0, 0, unimplemented},
     [0x24] = {"", 0, 0, unimplemented},
@@ -116,7 +134,7 @@ const instruction_s instruction_table[256] = {
     [0x2e] = {"LD L, n8", 2, 2, ld_r8_n8},
     [0x2f] = {"", 0, 0, unimplemented},
     [0x30] = {"", 0, 0, unimplemented},
-    [0x31] = {"", 0, 0, unimplemented},
+    [0x31] = {"LD SP, n16", 3, 3, ld_r16_n16},
     [0x32] = {"", 0, 0, unimplemented},
     [0x33] = {"", 0, 0, unimplemented},
     [0x34] = {"", 0, 0, unimplemented},
