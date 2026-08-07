@@ -31,11 +31,11 @@ typedef struct reg {
         };
         u16 hl;
     };
+    u16 sp, pc;
 } reg_s;
 
 typedef struct cpu {
     reg_s reg;
-    u8 sp, pc;
     u8 opcode;
 } cpu_s;
 

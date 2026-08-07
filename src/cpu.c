@@ -5,7 +5,7 @@
 
 cpu_s cpu;
 
-u8 fetch_byte(void) { return read_mem(cpu.pc++); }
+u8 fetch_byte(void) { return read_mem(cpu.reg.pc++); }
 u16 fetch_word(void) {
     u8 lo = fetch_byte();
     u8 hi = fetch_byte();
