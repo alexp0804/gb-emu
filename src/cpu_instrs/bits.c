@@ -31,3 +31,80 @@ void cpl_a() {
     cpu.reg.a = ~cpu.reg.a;
     FLAG_SET(FLAG_N | FLAG_H);
 }
+
+void rl_r8() {
+    u8 r8_code = Z_OPERAND(cpu.opcode);
+    u8 r8 = read_r8_operand(r8_code);
+    u8 bit7 = r8 >> 7;
+    u8 new_bit0 = FLAG_IS_SET(FLAG_C);
+    FLAG_WRITE(FLAG_C, bit7);
+    FLAG_CLEAR(FLAG_Z | FLAG_N | FLAG_H);
+    write_r8_operand(r8_code, (r8 << 1) | new_bit0);
+}
+
+void rlc_r8() {
+    u8 r8_code = Z_OPERAND(cpu.opcode);
+    u8 r8 = read_r8_operand(r8_code);
+    u8 bit7 = r8 >> 7;
+    FLAG_WRITE(FLAG_C, bit7);
+    FLAG_CLEAR(FLAG_Z | FLAG_N | FLAG_H);
+    write_r8_operand(r8_code, (r8 << 1) | bit7);
+}
+
+void rr_r8() {
+    u8 r8_code = Z_OPERAND(cpu.opcode);
+    u8 r8 = read_r8_operand(r8_code);
+    u8 bit0 = r8 & 1;
+    u8 new_bit7 = FLAG_IS_SET(FLAG_C);
+    FLAG_WRITE(FLAG_C, bit0);
+    FLAG_CLEAR(FLAG_Z | FLAG_N | FLAG_H);
+    write_r8_operand(r8_code, (r8 >> 1) | (new_bit7 << 7));
+}
+
+void rrc_r8() {
+    u8 r8_code = Z_OPERAND(cpu.opcode);
+    u8 r8 = read_r8_operand(r8_code);
+    u8 bit0 = r8 & 1;
+    FLAG_WRITE(FLAG_C, bit0);
+    FLAG_CLEAR(FLAG_Z | FLAG_N | FLAG_H);
+    write_r8_operand(r8_code, (r8 >> 1) | (bit0 << 7));
+}
+
+void sla_r8() {
+    u8 r8_code = Z_OPERAND(cpu.opcode);
+    u8 r8 = read_r8_operand(r8_code);
+    u8 result = r8 << 1;
+    FLAG_WRITE(FLAG_Z, result == 0);
+    FLAG_CLEAR(FLAG_N | FLAG_H);
+    FLAG_WRITE(FLAG_C, r8 >> 7);
+    write_r8_operand(r8_code, result);
+}
+
+void sra_r8() {
+    u8 r8_code = Z_OPERAND(cpu.opcode);
+    u8 r8 = read_r8_operand(r8_code);
+    u8 result = (r8 & 0x80) | (r8 >> 1);
+    FLAG_WRITE(FLAG_Z, result == 0);
+    FLAG_CLEAR(FLAG_N | FLAG_H);
+    FLAG_WRITE(FLAG_C, r8 & 1);
+    write_r8_operand(r8_code, result);
+}
+
+void srl_r8() {
+    u8 r8_code = Z_OPERAND(cpu.opcode);
+    u8 r8 = read_r8_operand(r8_code);
+    u8 result = r8 >> 1;
+    FLAG_WRITE(FLAG_Z, result == 0);
+    FLAG_CLEAR(FLAG_N | FLAG_H);
+    FLAG_WRITE(FLAG_C, r8 & 1);
+    write_r8_operand(r8_code, result);
+}
+
+void swap_r8() {
+    u8 r8_code = Z_OPERAND(cpu.opcode);
+    u8 r8 = read_r8_operand(r8_code);
+    u8 result = (r8 << 4) | (r8 >> 4);
+    FLAG_WRITE(FLAG_Z, result == 0);
+    FLAG_CLEAR(FLAG_N | FLAG_H | FLAG_C);
+    write_r8_operand(r8_code, result);
+}

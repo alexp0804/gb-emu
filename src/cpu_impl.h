@@ -43,8 +43,7 @@ typedef struct instruction {
 } instruction_s;
 
 extern const instruction_s instruction_table[256];
-extern const instruction_s bit_shift_instruction_table[8];
-extern const instruction_s bit_flag_instruction_table[4];
+extern const instruction_s cb_instruction_table[256];
 
 u8 fetch_byte(void);
 u16 fetch_word(void);
@@ -102,6 +101,15 @@ void call_n16(void);
 void call_cond_n16(void);
 void ret(void);
 void ret_cond(void);
+
+void rl_r8(void);
+void rlc_r8(void);
+void rr_r8(void);
+void rrc_r8(void);
+void sla_r8(void);
+void sra_r8(void);
+void srl_r8(void);
+void swap_r8(void);
 
 void pop_r16stk(void);
 void push_r16stk(void);
