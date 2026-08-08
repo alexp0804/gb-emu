@@ -93,5 +93,15 @@ void xor_a_r8(void);
 void xor_a_n8(void);
 void cpl_a(void);
 
+void jp_hl(void);
+void jp_n16(void);
+void jp_cond_n16(void);
+void jr_d8(void);
+void jr_cond_d8(void);
+void call_n16(void);
+void call_cond_n16(void);
+void ret(void);
+void ret_cond(void);
+
 void pop_r16stk(void);
 void push_r16stk(void);
