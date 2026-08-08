@@ -64,6 +64,7 @@ u8 read_r8_operand(u8 code) {
     printf("Invalid read of r8 operand.\n");
     exit(1);
 }
+
 void write_r16_operand(u8 code, u16 val) {
     switch (code) {
         case 0:
@@ -80,6 +81,83 @@ void write_r16_operand(u8 code, u16 val) {
             return;
     }
     printf("Invalid write to r16 operand.\n");
+    exit(1);
+}
+u16 read_r16_operand(u8 code) {
+    switch (code) {
+        case 0:
+            return cpu.reg.bc;
+        case 1:
+            return cpu.reg.de;
+        case 2:
+            return cpu.reg.hl;
+        case 3:
+            return cpu.reg.sp;
+    }
+    printf("Invalid read of r16 operand.\n");
+    exit(1);
+}
+
+u16 read_r16mem_operand(u8 code) {
+    switch (code) {
+        case 0:
+            return cpu.reg.bc;
+        case 1:
+            return cpu.reg.de;
+        case 2:
+            return cpu.reg.hl++;
+        case 3:
+            return cpu.reg.hl--;
+    }
+    printf("Invalid read of r16mem operand.\n");
+    exit(1);
+}
+
+void write_r16stk_operand(u8 code, u16 val) {
+    switch (code) {
+        case 0:
+            cpu.reg.bc = val;
+            return;
+        case 1:
+            cpu.reg.de = val;
+            return;
+        case 2:
+            cpu.reg.hl = val;
+            return;
+        case 3:
+            cpu.reg.af = val & 0xFFF0;
+            return;
+    }
+    printf("Invalid write to r16stk operand.\n");
+    exit(1);
+}
+u16 read_r16stk_operand(u8 code) {
+    switch (code) {
+        case 0:
+            return cpu.reg.bc;
+        case 1:
+            return cpu.reg.de;
+        case 2:
+            return cpu.reg.hl;
+        case 3:
+            return cpu.reg.af;
+    }
+    printf("Invalid read of r16stk operand.\n");
+    exit(1);
+}
+
+bool condition_met(u8 cond) {
+    switch (cond) {
+        case 0:
+            return !FLAG_IS_SET(FLAG_Z);
+        case 1:
+            return FLAG_IS_SET(FLAG_Z);
+        case 2:
+            return !FLAG_IS_SET(FLAG_C);
+        case 3:
+            return FLAG_IS_SET(FLAG_C);
+    }
+    printf("Attempted to decode an invalid condition code.\n");
     exit(1);
 }
 

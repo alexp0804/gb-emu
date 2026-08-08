@@ -3,6 +3,22 @@
 #include "common.h"
 #include "cpu.h"
 
+#define FLAG_Z (1 << 7)
+#define FLAG_N (1 << 6)
+#define FLAG_H (1 << 5)
+#define FLAG_C (1 << 4)
+
+#define FLAG_IS_SET(x) ((cpu.reg.f & (x)) != 0)
+#define FLAG_SET(x) (cpu.reg.f |= (x))
+#define FLAG_CLEAR(x) (cpu.reg.f &= ~(x))
+#define FLAG_WRITE(flag, cond) \
+    do {                       \
+        if (cond)              \
+            FLAG_SET(flag);    \
+        else                   \
+            FLAG_CLEAR(flag);  \
+    } while (0)
+
 // Clears all bits outside the range (hi..lo]
 //  e.g. MASK_RANGE(0xff, 0, 8) -> 0xff
 //       MASK_RANGE(0xff, 0, 4) -> 0x0f
@@ -35,8 +51,16 @@ u16 fetch_word(void);
 
 void write_r8_operand(u8 code, u8 val);
 u8 read_r8_operand(u8 code);
+
 void write_r16_operand(u8 code, u16 val);
 u16 read_r16_operand(u8 code);
+
+u16 read_r16mem_operand(u8 code);
+
+void write_r16stk_operand(u8 code, u16 val);
+u16 read_r16stk_operand(u8 code);
+
+bool condition_met(u8 cond);
 
 instruction_s decode_opcode(void);
 
