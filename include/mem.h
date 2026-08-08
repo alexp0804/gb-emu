@@ -1,6 +1,9 @@
 #pragma once
 #include "common.h"
 
+#define IO_START 0xFF00
+#define IO_END 0xFF7F
+
 typedef struct memory {
 } mem_s;
 

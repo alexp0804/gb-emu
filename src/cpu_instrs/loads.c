@@ -12,3 +12,9 @@ void ld_a_at_r16mem() { cpu.reg.a = read_mem(P_OPERAND(cpu.opcode)); }
 
 void ld_at_n16_a() { write_mem(fetch_word(), cpu.reg.a); }
 void ld_a_at_n16() { cpu.reg.a = read_mem(fetch_word()); }
+
+void ldh_at_n8_a() { write_mem(IO_START + fetch_byte(), cpu.reg.a); }
+void ldh_a_at_n8() { cpu.reg.a = read_mem(IO_START + fetch_byte()); }
+
+void ldh_at_c_a() { write_mem(IO_START + cpu.reg.c, cpu.reg.a); }
+void ldh_a_at_c() { cpu.reg.a = read_mem(IO_START + cpu.reg.c); }
