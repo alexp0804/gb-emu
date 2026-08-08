@@ -85,5 +85,13 @@ void ldh_at_n8_a(void);
 void ldh_a_at_n8(void);
 void ld_sp_hl(void);
 
+void and_a_r8(void);
+void and_a_n8(void);
+void or_a_r8(void);
+void or_a_n8(void);
+void xor_a_r8(void);
+void xor_a_n8(void);
+void cpl_a(void);
+
 void pop_r16stk(void);
 void push_r16stk(void);
