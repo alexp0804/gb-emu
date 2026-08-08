@@ -6,5 +6,9 @@ void unimplemented() {
     printf("Unimplemented instruction!\n");
     exit(1);
 }
+void invalid() {
+    printf("Encountered an invalid instruction!\n");
+    exit(1);
+}
 
 void noop() {}

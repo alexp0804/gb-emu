@@ -68,6 +68,8 @@ bool condition_met(u8 cond);
 instruction_s decode_opcode(void);
 
 void unimplemented(void);
+void invalid(void);
+
 void noop(void);
 
 void ld_r8_r8(void);
