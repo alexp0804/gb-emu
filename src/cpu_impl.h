@@ -72,3 +72,5 @@ void ld_r8_n8(void);
 void ld_r16_n16(void);
 void ld_at_r16mem_a(void);
 void ld_a_at_r16mem(void);
+void ld_at_n16_a(void);
+void ld_a_at_n16(void);

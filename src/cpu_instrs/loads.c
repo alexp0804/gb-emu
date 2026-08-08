@@ -9,3 +9,6 @@ void ld_r16_n16() { write_r16_operand(P_OPERAND(cpu.opcode), fetch_word()); }
 
 void ld_at_r16mem_a() { write_mem(read_r16mem_operand(P_OPERAND(cpu.opcode)), cpu.reg.a); }
 void ld_a_at_r16mem() { cpu.reg.a = read_mem(P_OPERAND(cpu.opcode)); }
+
+void ld_at_n16_a() { write_mem(fetch_word(), cpu.reg.a); }
+void ld_a_at_n16() { cpu.reg.a = read_mem(fetch_word()); }
