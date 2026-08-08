@@ -18,3 +18,5 @@ void ldh_a_at_n8() { cpu.reg.a = read_mem(IO_START + fetch_byte()); }
 
 void ldh_at_c_a() { write_mem(IO_START + cpu.reg.c, cpu.reg.a); }
 void ldh_a_at_c() { cpu.reg.a = read_mem(IO_START + cpu.reg.c); }
+
+void ld_sp_hl() { cpu.reg.sp = cpu.reg.hl; }

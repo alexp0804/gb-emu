@@ -81,6 +81,7 @@ void ldh_at_c_a(void);
 void ldh_a_at_c(void);
 void ldh_at_n8_a(void);
 void ldh_a_at_n8(void);
+void ld_sp_hl(void);
 
-void pop_r16stk();
-void push_r16stk();
+void pop_r16stk(void);
+void push_r16stk(void);
