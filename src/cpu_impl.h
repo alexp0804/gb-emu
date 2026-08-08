@@ -49,6 +49,9 @@ extern const instruction_s bit_flag_instruction_table[4];
 u8 fetch_byte(void);
 u16 fetch_word(void);
 
+void push_word(u16 val);
+u16 pop_word();
+
 void write_r8_operand(u8 code, u8 val);
 u8 read_r8_operand(u8 code);
 
@@ -78,3 +81,6 @@ void ldh_at_c_a(void);
 void ldh_a_at_c(void);
 void ldh_at_n8_a(void);
 void ldh_a_at_n8(void);
+
+void pop_r16stk();
+void push_r16stk();

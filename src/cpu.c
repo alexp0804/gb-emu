@@ -5,10 +5,24 @@
 
 cpu_s cpu;
 
+// Todo: in the case of branching instructions, cycle lengths may be different based on if the
+// condition for that instruction is met or not.
+
 u8 fetch_byte(void) { return read_mem(cpu.reg.pc++); }
 u16 fetch_word(void) {
     u8 lo = fetch_byte();
     u8 hi = fetch_byte();
+    return (hi << 8) | lo;
+}
+
+void push_word(u16 val) {
+    write_mem(--cpu.reg.sp, (val & 0xFF00) >> 8);
+    write_mem(--cpu.reg.sp, (val & 0x00FF));
+}
+u16 pop_word() {
+    u16 lo = read_mem(cpu.reg.sp++);
+    u16 hi = read_mem(cpu.reg.sp++);
+
     return (hi << 8) | lo;
 }
 
@@ -356,11 +370,11 @@ const instruction_s instruction_table[256] = {
     [0xbe] = {"", 0, 0, unimplemented},
     [0xbf] = {"", 0, 0, unimplemented},
     [0xc0] = {"", 0, 0, unimplemented},
-    [0xc1] = {"", 0, 0, unimplemented},
+    [0xc1] = {"POP BC", 1, 3, pop_r16stk},
     [0xc2] = {"", 0, 0, unimplemented},
     [0xc3] = {"", 0, 0, unimplemented},
     [0xc4] = {"", 0, 0, unimplemented},
-    [0xc5] = {"", 0, 0, unimplemented},
+    [0xc5] = {"PUSH BC", 1, 4, push_r16stk},
     [0xc6] = {"", 0, 0, unimplemented},
     [0xc7] = {"", 0, 0, unimplemented},
     [0xc8] = {"", 0, 0, unimplemented},
@@ -372,11 +386,11 @@ const instruction_s instruction_table[256] = {
     [0xce] = {"", 0, 0, unimplemented},
     [0xcf] = {"", 0, 0, unimplemented},
     [0xd0] = {"", 0, 0, unimplemented},
-    [0xd1] = {"", 0, 0, unimplemented},
+    [0xd1] = {"POP DE", 1, 3, pop_r16stk},
     [0xd2] = {"", 0, 0, unimplemented},
     [0xd3] = {"", 0, 0, unimplemented},
     [0xd4] = {"", 0, 0, unimplemented},
-    [0xd5] = {"", 0, 0, unimplemented},
+    [0xd5] = {"PUSH DE", 1, 4, push_r16stk},
     [0xd6] = {"", 0, 0, unimplemented},
     [0xd7] = {"", 0, 0, unimplemented},
     [0xd8] = {"", 0, 0, unimplemented},
@@ -388,11 +402,11 @@ const instruction_s instruction_table[256] = {
     [0xde] = {"", 0, 0, unimplemented},
     [0xdf] = {"", 0, 0, unimplemented},
     [0xe0] = {"LDH (n8), A", 2, 3, ldh_at_n8_a},
-    [0xe1] = {"", 0, 0, unimplemented},
+    [0xe1] = {"POP HL", 1, 3, pop_r16stk},
     [0xe2] = {"LDH (C), A", 1, 2, ldh_at_c_a},
     [0xe3] = {"", 0, 0, unimplemented},
     [0xe4] = {"", 0, 0, unimplemented},
-    [0xe5] = {"", 0, 0, unimplemented},
+    [0xe5] = {"PUSH HL", 1, 4, push_r16stk},
     [0xe6] = {"", 0, 0, unimplemented},
     [0xe7] = {"", 0, 0, unimplemented},
     [0xe8] = {"", 0, 0, unimplemented},
@@ -404,11 +418,11 @@ const instruction_s instruction_table[256] = {
     [0xee] = {"", 0, 0, unimplemented},
     [0xef] = {"", 0, 0, unimplemented},
     [0xf0] = {"LDH A, (n8)", 2, 3, ldh_a_at_n8},
-    [0xf1] = {"", 0, 0, unimplemented},
+    [0xf1] = {"POP AF", 1, 3, pop_r16stk},
     [0xf2] = {"LDH A, (C)", 1, 2, ldh_a_at_c},
     [0xf3] = {"", 0, 0, unimplemented},
     [0xf4] = {"", 0, 0, unimplemented},
-    [0xf5] = {"", 0, 0, unimplemented},
+    [0xf5] = {"PUSH AF", 1, 4, push_r16stk},
     [0xf6] = {"", 0, 0, unimplemented},
     [0xf7] = {"", 0, 0, unimplemented},
     [0xf8] = {"", 0, 0, unimplemented},
