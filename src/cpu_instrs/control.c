@@ -36,3 +36,8 @@ void reti() {
     ei();
     ret();
 }
+
+void rst_tgt3() {
+    push_word(cpu.reg.pc);
+    cpu.reg.pc = 8 * Y_OPERAND(cpu.opcode);
+}

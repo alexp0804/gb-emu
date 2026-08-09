@@ -109,6 +109,7 @@ void call_cond_n16(void);
 void ret(void);
 void ret_cond(void);
 void reti(void);
+void rst_tgt3(void);
 
 void di(void);
 void ei(void);
