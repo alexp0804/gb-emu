@@ -92,6 +92,8 @@ void xor_a_r8(void);
 void xor_a_n8(void);
 void cpl_a(void);
 
+void dec_r8(void);
+void inc_r8(void);
 void dec_r16(void);
 void inc_r16(void);
 
