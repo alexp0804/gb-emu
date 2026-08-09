@@ -32,3 +32,7 @@ void ret() { cpu.reg.pc = pop_word(); }
 void ret_cond() {
     if (condition_met(R_OPERAND(cpu.opcode))) ret();
 }
+void reti() {
+    ei();
+    ret();
+}

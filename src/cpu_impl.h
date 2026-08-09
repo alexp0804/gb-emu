@@ -108,6 +108,10 @@ void call_n16(void);
 void call_cond_n16(void);
 void ret(void);
 void ret_cond(void);
+void reti(void);
+
+void di(void);
+void ei(void);
 
 void rl_r8(void);
 void rlc_r8(void);
