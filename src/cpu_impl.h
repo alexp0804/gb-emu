@@ -92,10 +92,18 @@ void xor_a_r8(void);
 void xor_a_n8(void);
 void cpl_a(void);
 
-void dec_r8(void);
+void add_a_r8(void);
+void add_a_n8(void);
+void adc_a_r8(void);
+void adc_a_n8(void);
+void sub_a_r8(void);
+void sub_a_n8(void);
+void sbc_a_r8(void);
+void sbc_a_n8(void);
 void inc_r8(void);
-void dec_r16(void);
+void dec_r8(void);
 void inc_r16(void);
+void dec_r16(void);
 void ccf(void);
 void scf(void);
 
