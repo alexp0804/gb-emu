@@ -100,6 +100,8 @@ void sub_a_r8(void);
 void sub_a_n8(void);
 void sbc_a_r8(void);
 void sbc_a_n8(void);
+void cp_a_r8(void);
+void cp_a_n8(void);
 void inc_r8(void);
 void dec_r8(void);
 void inc_r16(void);
