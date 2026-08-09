@@ -96,6 +96,8 @@ void dec_r8(void);
 void inc_r8(void);
 void dec_r16(void);
 void inc_r16(void);
+void ccf(void);
+void scf(void);
 
 void jp_hl(void);
 void jp_n16(void);

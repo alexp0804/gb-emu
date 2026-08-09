@@ -12,3 +12,13 @@ void invalid() {
 }
 
 void noop() {}
+
+void ccf() {
+    FLAG_CLEAR(FLAG_N | FLAG_H);
+    FLAG_WRITE(FLAG_C, !FLAG_IS_SET(FLAG_C));
+}
+
+void scf() {
+    FLAG_CLEAR(FLAG_N | FLAG_H);
+    FLAG_SET(FLAG_C);
+}
