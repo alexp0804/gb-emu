@@ -110,6 +110,9 @@ void sla_r8(void);
 void sra_r8(void);
 void srl_r8(void);
 void swap_r8(void);
+void bit_b3_r8(void);
+void res_b3_r8(void);
+void set_b3_r8(void);
 
 void pop_r16stk(void);
 void push_r16stk(void);

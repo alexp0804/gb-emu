@@ -108,3 +108,23 @@ void swap_r8() {
     FLAG_CLEAR(FLAG_N | FLAG_H | FLAG_C);
     write_r8_operand(r8_code, result);
 }
+
+void bit_b3_r8() {
+    u8 b3_code = Y_OPERAND(cpu.opcode);
+    u8 r8_code = Z_OPERAND(cpu.opcode);
+    FLAG_WRITE(FLAG_Z, (read_r8_operand(r8_code) & (1 << b3_code)) == 0);
+    FLAG_CLEAR(FLAG_N);
+    FLAG_SET(FLAG_H);
+}
+
+void res_b3_r8() {
+    u8 b3_code = Y_OPERAND(cpu.opcode);
+    u8 r8_code = Z_OPERAND(cpu.opcode);
+    write_r8_operand(r8_code, read_r8_operand(r8_code) & (~(1 << b3_code)));
+}
+
+void set_b3_r8() {
+    u8 b3_code = Y_OPERAND(cpu.opcode);
+    u8 r8_code = Z_OPERAND(cpu.opcode);
+    write_r8_operand(r8_code, read_r8_operand(r8_code) | (1 << b3_code));
+}
