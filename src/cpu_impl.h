@@ -107,6 +107,7 @@ void inc_r8(void);
 void dec_r8(void);
 void inc_r16(void);
 void dec_r16(void);
+void add_hl_r16(void);
 void ccf(void);
 void scf(void);
 

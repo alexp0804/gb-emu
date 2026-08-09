@@ -59,3 +59,12 @@ void dec_r16() {
     u8 r16_code = P_OPERAND(cpu.opcode);
     write_r16_operand(r16_code, read_r16_operand(r16_code) - 1);
 }
+
+void add_hl_r16() {
+    u16 r16 = read_r16_operand(Y_OPERAND(cpu.opcode));
+    u16 result = cpu.reg.hl + r16;
+    FLAG_CLEAR(FLAG_N);
+    FLAG_WRITE(FLAG_H, (cpu.reg.hl & 0x0FFF) + (r16 & 0x0FFF) >= 0x1000);
+    FLAG_WRITE(FLAG_C, result < cpu.reg.hl);
+    cpu.reg.hl = result;
+}
