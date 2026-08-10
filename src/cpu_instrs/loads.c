@@ -21,3 +21,8 @@ void ldh_at_c_a() { write_mem(IO_START + cpu.reg.c, cpu.reg.a); }
 void ldh_a_at_c() { cpu.reg.a = read_mem(IO_START + cpu.reg.c); }
 
 void ld_sp_hl() { cpu.reg.sp = cpu.reg.hl; }
+
+void ld_hl_sp_plus_d8() {
+    i8 d8 = (i8)fetch_byte();
+    cpu.reg.hl = add_sp(d8);
+}

@@ -68,3 +68,15 @@ void add_hl_r16() {
     FLAG_WRITE(FLAG_C, result < cpu.reg.hl);
     cpu.reg.hl = result;
 }
+
+u16 add_sp(i8 d8) {
+    u16 result = cpu.reg.sp + d8;
+    FLAG_CLEAR(FLAG_Z | FLAG_N);
+    FLAG_WRITE(FLAG_H, (cpu.reg.sp & 0x0F) + (d8 & 0x0F) >= 0x10);
+    FLAG_WRITE(FLAG_C, (cpu.reg.sp & 0xFF) + (d8 & 0xFF) >= 0x100);
+    return result;
+}
+void add_sp_d8() {
+    i8 d8 = (i8)fetch_byte();
+    cpu.reg.sp = add_sp(d8);
+}

@@ -84,6 +84,7 @@ void ldh_a_at_c(void);
 void ldh_at_n8_a(void);
 void ldh_a_at_n8(void);
 void ld_sp_hl(void);
+void ld_hl_sp_plus_d8(void);
 
 void and_a_r8(void);
 void and_a_n8(void);
@@ -108,6 +109,8 @@ void dec_r8(void);
 void inc_r16(void);
 void dec_r16(void);
 void add_hl_r16(void);
+void add_sp_d8(void);
+u16 add_sp(i8 d8);
 void ccf(void);
 void scf(void);
 
