@@ -11,6 +11,10 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    printf("Hello World!\n");
+    emu_init();
+    while (true) {
+        emu_step();
+    }
+
     return 0;
 }

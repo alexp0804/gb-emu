@@ -1,6 +1,10 @@
 #include "emu.h"
 
+#include "cpu.h"
 #include "mem.h"
+
+void emu_init() { cpu_init(); }
+void emu_step() { cpu_step(); }
 
 bool read_rom_file(char* rom_file) {
     char path_to_rom[256];
