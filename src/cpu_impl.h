@@ -70,6 +70,7 @@ void unimplemented(void);
 void invalid(void);
 
 void noop(void);
+void stop(void);
 
 void ld_r8_r8(void);
 void ld_r8_n8(void);
@@ -128,6 +129,7 @@ void rst_tgt3(void);
 
 void di(void);
 void ei(void);
+void halt(void);
 
 void rl_r8(void);
 void rlc_r8(void);
@@ -140,6 +142,8 @@ void swap_r8(void);
 void bit_b3_r8(void);
 void res_b3_r8(void);
 void set_b3_r8(void);
+
+void daa(void);
 
 void pop_r16stk(void);
 void push_r16stk(void);
