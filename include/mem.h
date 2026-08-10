@@ -29,6 +29,7 @@ typedef struct memory {
     u8 oam[OAM_END - OAM_START + 1];
     u8 io[IO_END - IO_START + 1];
     u8 hram[HRAM_END - HRAM_START + 1];
+    u8 ie;
 } mem_s;
 
 extern mem_s mem;
