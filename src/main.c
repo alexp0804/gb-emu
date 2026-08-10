@@ -1,6 +1,16 @@
 #include <stdio.h>
 
-int main(void) {
+#include "emu.h"
+
+int main(int argc, char* argv[]) {
+    char* rom_file = "Tetris.gb";
+    if (argc == 2) {
+        rom_file = argv[1];
+    }
+    if (!read_rom_file(rom_file)) {
+        return 1;
+    }
+
     printf("Hello World!\n");
     return 0;
 }
