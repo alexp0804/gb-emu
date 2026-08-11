@@ -2,6 +2,8 @@
 
 #include "common.h"
 
+#define FRAME_RATE 60
+
 typedef struct video {
     SDL_Window* window;
     SDL_Renderer* renderer;

@@ -2,6 +2,8 @@
 
 #include "common.h"
 
+#define CLOCK_SPEED 4194304
+
 typedef struct reg {
     union {
         struct {

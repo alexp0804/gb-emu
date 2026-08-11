@@ -6,6 +6,8 @@
 #include "ppu.h"
 #include "renderer.h"
 
+const u32 cycles_per_frame = CLOCK_SPEED / FRAME_RATE;
+
 void emu_init() {
     renderer_init();
     cpu_init();
@@ -16,7 +18,11 @@ void emu_deinit() {
     mem_deinit();
 }
 void emu_step() {
-    cpu_step();
+    u32 cycles_this_frame = 0;
+    while (cycles_this_frame < cycles_per_frame) {
+        u8 cycles = cpu_step();
+        cycles_this_frame += cycles;
+    }
     renderer_step();
 }
 
