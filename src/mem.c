@@ -7,7 +7,7 @@ u8 cartridge[MAX_CART_SIZE];
 
 bool in_range(u16 addr, u16 lo, u16 hi) { return (lo <= addr && addr <= hi); }
 
-u8 read_mem(u16 addr) {
+u8 mem_read(u16 addr) {
     if (in_range(addr, ROM_START, ROM_END)) {
         return mem.cart[addr - ROM_START];
     }
@@ -37,8 +37,7 @@ u8 read_mem(u16 addr) {
     }
     __builtin_unreachable();
 }
-
-void write_mem(u16 addr, u8 val) {
+void mem_write(u16 addr, u8 val) {
     if (in_range(addr, ROM_START, ROM_END)) {
         mem.cart[addr - ROM_START] = val;
     }

@@ -24,14 +24,14 @@ void cpu_init(void) {
 }
 
 u8 cpu_step(void) {
-    cpu.opcode = read_mem(cpu.reg.pc++);
+    cpu.opcode = mem_read(cpu.reg.pc++);
     instruction_s instr = decode_opcode();
     instr.execute();
 
     return instr.cycles;
 }
 
-u8 fetch_byte(void) { return read_mem(cpu.reg.pc++); }
+u8 fetch_byte(void) { return mem_read(cpu.reg.pc++); }
 u16 fetch_word(void) {
     u8 lo = fetch_byte();
     u8 hi = fetch_byte();
@@ -39,12 +39,12 @@ u16 fetch_word(void) {
 }
 
 void push_word(u16 val) {
-    write_mem(--cpu.reg.sp, (val & 0xFF00) >> 8);
-    write_mem(--cpu.reg.sp, (val & 0x00FF));
+    mem_write(--cpu.reg.sp, (val & 0xFF00) >> 8);
+    mem_write(--cpu.reg.sp, (val & 0x00FF));
 }
 u16 pop_word() {
-    u16 lo = read_mem(cpu.reg.sp++);
-    u16 hi = read_mem(cpu.reg.sp++);
+    u16 lo = mem_read(cpu.reg.sp++);
+    u16 hi = mem_read(cpu.reg.sp++);
 
     return (hi << 8) | lo;
 }
@@ -70,7 +70,7 @@ void write_r8_operand(u8 code, u8 val) {
             cpu.reg.l = val;
             return;
         case 6:
-            write_mem(cpu.reg.hl, val);
+            mem_write(cpu.reg.hl, val);
             return;
         case 7:
             cpu.reg.a = val;
@@ -94,7 +94,7 @@ u8 read_r8_operand(u8 code) {
         case 5:
             return cpu.reg.l;
         case 6:
-            return read_mem(cpu.reg.hl);
+            return mem_read(cpu.reg.hl);
         case 7:
             return cpu.reg.a;
     }

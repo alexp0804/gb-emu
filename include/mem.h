@@ -35,5 +35,5 @@ typedef struct memory {
 extern mem_s mem;
 extern u8 cartridge[MAX_CART_SIZE];
 
-u8 read_mem(u16 addr);
-void write_mem(u16 addr, u8 val);
+u8 mem_read(u16 addr);
+void mem_write(u16 addr, u8 val);

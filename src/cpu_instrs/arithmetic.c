@@ -61,7 +61,7 @@ void dec_r16() {
 }
 
 void add_hl_r16() {
-    u16 r16 = read_r16_operand(Y_OPERAND(cpu.opcode));
+    u16 r16 = read_r16_operand(P_OPERAND(cpu.opcode));
     u16 result = cpu.reg.hl + r16;
     FLAG_CLEAR(FLAG_N);
     FLAG_WRITE(FLAG_H, (cpu.reg.hl & 0x0FFF) + (r16 & 0x0FFF) >= 0x1000);
