@@ -19,8 +19,6 @@
 #define HRAM_END 0xFFFE
 #define IE_ADDR 0xFFFF
 
-#define MAX_CART_SIZE 0x200000
-
 typedef struct memory {
     u8 cart[ROM_END - ROM_START + 1];
     u8 vram[VRAM_END - VRAM_START + 1];
@@ -33,7 +31,11 @@ typedef struct memory {
 } mem_s;
 
 extern mem_s mem;
-extern u8 cartridge[MAX_CART_SIZE];
+
+bool in_range(u16 addr, u16 lo, u16 hi);
+
+void mem_init(void);
+void mem_deinit(void);
 
 u8 mem_read(u16 addr);
 void mem_write(u16 addr, u8 val);

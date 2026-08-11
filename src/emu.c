@@ -1,9 +1,13 @@
 #include "emu.h"
 
+#include "cart.h"
 #include "cpu.h"
 #include "mem.h"
 
-void emu_init() { cpu_init(); }
+void emu_init() {
+    cpu_init();
+    mem_init();
+}
 void emu_step() { cpu_step(); }
 
 bool read_rom_file(char* rom_file) {
@@ -14,7 +18,7 @@ bool read_rom_file(char* rom_file) {
         perror("Error opening file");
         return false;
     }
-    fread(cartridge, 1, MAX_CART_SIZE, fptr);
+    fread(cart.rom, 1, MAX_CART_ROM_SIZE, fptr);
     fclose(fptr);
     return true;
 }

@@ -23,10 +23,25 @@ void cpu_init(void) {
     };
 }
 
+void debug_register() {
+    printf("pc=0x%04x\n", cpu.reg.pc);
+    printf("op=0x%04x\n", cpu.opcode);
+    printf("af=0x%04x\n", cpu.reg.af);
+    printf("bc=0x%04x\n", cpu.reg.bc);
+    printf("de=0x%04x\n", cpu.reg.de);
+    printf("hl=0x%04x\n", cpu.reg.hl);
+    printf("sp=0x%04x\n", cpu.reg.sp);
+    printf("\n");
+}
+
 u8 cpu_step(void) {
-    cpu.opcode = mem_read(cpu.reg.pc++);
+    cpu.opcode = mem_read(cpu.reg.pc);
+    // debug_register();
+    cpu.reg.pc++;
     instruction_s instr = decode_opcode();
     instr.execute();
+
+    // getchar();
 
     return instr.cycles;
 }
