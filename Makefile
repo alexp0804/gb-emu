@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g
-LDFLAGS = 
+CFLAGS = -Wall -Wextra -g $(shell pkg-config --cflags sdl2)
+LDFLAGS = $(shell pkg-config --libs sdl2)
 
 SRC_DIR = src
 INCLUDE_DIR = include
