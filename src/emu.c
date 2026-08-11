@@ -22,6 +22,8 @@ void emu_step() {
     while (cycles_this_frame < cycles_per_frame) {
         u8 cycles = cpu_step();
         cycles_this_frame += cycles;
+        ppu_step(cycles);
+        cpu_handle_interrupts();
     }
     renderer_step();
 }

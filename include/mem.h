@@ -17,7 +17,6 @@
 #define IO_END 0xFF7F
 #define HRAM_START 0xFF80
 #define HRAM_END 0xFFFE
-#define IE_ADDR 0xFFFF
 
 typedef struct memory {
     u8 cart[ROM_END - ROM_START + 1];
@@ -39,3 +38,6 @@ void mem_deinit(void);
 
 u8 mem_read(u16 addr);
 void mem_write(u16 addr, u8 val);
+
+u8 io_read(u16 addr);
+void io_write(u16 addr, u8 val);

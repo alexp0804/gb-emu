@@ -2,6 +2,8 @@
 
 #include "cart.h"
 #include "common.h"
+#include "cpu.h"
+#include "ppu.h"
 
 mem_s mem;
 
@@ -30,13 +32,13 @@ u8 mem_read(u16 addr) {
         return mem.io[addr - OAM_START];
     }
     if (in_range(addr, IO_START, IO_END)) {
-        return mem.io[addr - IO_START];
+        return io_read(addr);
     }
     if (in_range(addr, HRAM_START, HRAM_END)) {
         return mem.hram[addr - HRAM_START];
     }
-    if (addr == IE_ADDR) {
-        return mem.ie;
+    if (addr == IE_REG) {
+        return cpu.interrupt_enable;
     }
     __builtin_unreachable();
 }
@@ -57,12 +59,88 @@ void mem_write(u16 addr, u8 val) {
         mem.io[addr - OAM_START] = val;
     }
     if (in_range(addr, IO_START, IO_END)) {
-        mem.io[addr - IO_START] = val;
+        io_write(addr, val);
     }
     if (in_range(addr, HRAM_START, HRAM_END)) {
         mem.hram[addr - HRAM_START] = val;
     }
-    if (addr == IE_ADDR) {
-        mem.ie = val;
+    if (addr == IE_REG) {
+        cpu.interrupt_enable = val;
+    }
+}
+
+u8 io_read(u16 addr) {
+    switch (addr) {
+        case 0xFF00:  // hardcode joypad to 0xCF for now.
+            return 0xCF;
+        case IF_REG:
+            return cpu.interrupt_flag;
+        case LCDC_REG:
+            return ppu.lcd_control;
+        case STAT_REG:
+            return ppu.lcd_status;
+        case SCY_REG:
+            return ppu.scroll_y;
+        case SCX_REG:
+            return ppu.scroll_x;
+        case LY_REG:
+            return ppu.ly;
+        case LYC_REG:
+            return ppu.lyc;
+        case BGP_REG:
+            return ppu.bg_palette;
+        case OBP0_REG:
+            return ppu.obj_palette0;
+        case OBP1_REG:
+            return ppu.obj_palette1;
+        case WY_REG:
+            return ppu.window_y;
+        case WX_REG:
+            return ppu.window_x;
+        default:
+            return mem.io[addr - IO_START];
+    }
+}
+void io_write(u16 addr, u8 val) {
+    switch (addr) {
+        case IF_REG:
+            cpu.interrupt_flag = val;
+            break;
+        case LCDC_REG:
+            ppu.lcd_control = val;
+            break;
+        case STAT_REG:
+            ppu.lcd_status = val;
+            break;
+        case SCY_REG:
+            ppu.scroll_y = val;
+            break;
+        case SCX_REG:
+            ppu.scroll_x = val;
+            break;
+        case LY_REG:
+            ppu.ly = val;
+            break;
+        case LYC_REG:
+            ppu.lyc = val;
+            break;
+        case BGP_REG:
+            ppu.bg_palette = val;
+            break;
+        case OBP0_REG:
+            ppu.obj_palette0 = val;
+            break;
+        case OBP1_REG:
+            ppu.obj_palette1 = val;
+            break;
+        case WY_REG:
+            ppu.window_y = val;
+            break;
+        case WX_REG:
+            ppu.window_x = val;
+            break;
+        default:
+            mem.io[addr - IO_START] = val;
+            break;
     }
 }

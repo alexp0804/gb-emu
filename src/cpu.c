@@ -8,6 +8,41 @@ cpu_s cpu;
 // Todo: in the case of branching instructions, cycle lengths may be different based on if the
 // condition for that instruction is met or not.
 
+void service_interrupt(interrupt_e i) {
+    cpu.interrupt_master_enable = false;
+    CLEAR_BIT(cpu.interrupt_flag, i);
+
+    push_word(cpu.reg.pc);
+
+    switch (i) {
+        case INT_VBLANK:
+            cpu.reg.pc = INT_VBLANK_HANDLER;
+            break;
+        case INT_LCD:
+            cpu.reg.pc = INT_LCD_HANDLER;
+            break;
+        case INT_TIMER:
+            cpu.reg.pc = INT_TIMER_HANDLER;
+            break;
+        case INT_SERIAL:
+            cpu.reg.pc = INT_SERIAL_HANDLER;
+            break;
+        case INT_JOYPAD:
+            cpu.reg.pc = INT_JOYPAD_HANDLER;
+            break;
+        default:
+            __builtin_unreachable();
+    }
+}
+void cpu_request_interrupt(interrupt_e i) { SET_BIT(cpu.interrupt_flag, i); }
+void cpu_handle_interrupts() {
+    for (interrupt_e i = INT_VBLANK; i <= INT_JOYPAD; i++) {
+        if (TEST_BIT(cpu.interrupt_flag, i) && TEST_BIT(cpu.interrupt_enable, i)) {
+            if (cpu.interrupt_master_enable) service_interrupt(i);
+        }
+    }
+}
+
 void cpu_init(void) {
     cpu.reg = (reg_s){
         .a = 0x01,
@@ -23,25 +58,10 @@ void cpu_init(void) {
     };
 }
 
-void debug_register() {
-    printf("pc=0x%04x\n", cpu.reg.pc);
-    printf("op=0x%04x\n", cpu.opcode);
-    printf("af=0x%04x\n", cpu.reg.af);
-    printf("bc=0x%04x\n", cpu.reg.bc);
-    printf("de=0x%04x\n", cpu.reg.de);
-    printf("hl=0x%04x\n", cpu.reg.hl);
-    printf("sp=0x%04x\n", cpu.reg.sp);
-    printf("\n");
-}
-
 u8 cpu_step(void) {
-    cpu.opcode = mem_read(cpu.reg.pc);
-    // debug_register();
-    cpu.reg.pc++;
+    cpu.opcode = mem_read(cpu.reg.pc++);
     instruction_s instr = decode_opcode();
     instr.execute();
-
-    // getchar();
 
     return instr.cycles;
 }
