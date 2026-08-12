@@ -67,13 +67,14 @@ void render_background() {
     }
 }
 void render_window() {
-    if (ppu.window_y > ppu.ly) return;
+    if (ppu.window_y > ppu.ly || ppu.window_x > SCREEN_WIDTH) return;
     u16 win_tilemap_addr = get_win_tilemap_addr();
     u8 win_x = ppu.window_x - 7;
 
     for (int x = win_x; x < SCREEN_WIDTH; x++) {
-        screen[x][ppu.ly] = get_bg_win_color(win_tilemap_addr, x - win_x, ppu.ly - ppu.window_y);
+        screen[x][ppu.ly] = get_bg_win_color(win_tilemap_addr, x - win_x, ppu.wly);
     }
+    ppu.wly++;
 }
 void render_objects() {}
 void render_scanline() {
@@ -91,6 +92,7 @@ void ppu_init(void) {
         .lcd_control = 0x91,
         .lcd_status = 0x85,
         .bg_palette = 0xFC,
+        .wly = 0,
     };
 }
 void ppu_step(u8 cycles) {
@@ -110,7 +112,7 @@ void ppu_step(u8 cycles) {
             ppu.cycle_count -= VBLANK_DURATION;
             ppu.ly++;
             if (ppu.ly > 153) {
-                ppu.ly = 0;
+                ppu.ly = ppu.wly = 0;
                 set_mode(MODE_OAM_SCAN);
             }
             update_lcd_status();

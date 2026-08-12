@@ -38,7 +38,7 @@ typedef enum PPU_MODE {
 
 typedef struct ppu {
     u8 lcd_control, lcd_status;
-    u8 ly, lyc;
+    u8 ly, lyc, wly;
     u8 window_x, window_y;
     u8 scroll_x, scroll_y;
     u8 bg_palette, obj_palette0, obj_palette1;
