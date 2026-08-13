@@ -7,13 +7,17 @@
 
 mem_s mem;
 
-bool in_range(u16 addr, u16 lo, u16 hi) { return (lo <= addr && addr <= hi); }
+bool in_range(u16 addr, u16 lo, u16 hi) {
+    return (lo <= addr && addr <= hi);
+}
 
 void mem_init() {
     // TODO: write mem mapped registers to their startup values.
     cart_init();
 }
-void mem_deinit() { cart_deinit(); }
+void mem_deinit() {
+    cart_deinit();
+}
 
 u8 mem_read(u16 addr) {
     if (in_range(addr, ROM_START, ROM_END) || in_range(addr, SRAM_START, SRAM_END)) {

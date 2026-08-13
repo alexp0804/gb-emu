@@ -34,11 +34,14 @@ void service_interrupt(interrupt_e i) {
             __builtin_unreachable();
     }
 }
-void cpu_request_interrupt(interrupt_e i) { SET_BIT(cpu.interrupt_flag, i); }
+void cpu_request_interrupt(interrupt_e i) {
+    SET_BIT(cpu.interrupt_flag, i);
+}
 void cpu_handle_interrupts() {
     for (interrupt_e i = INT_VBLANK; i <= INT_JOYPAD; i++) {
         if (TEST_BIT(cpu.interrupt_flag, i) && TEST_BIT(cpu.interrupt_enable, i)) {
-            if (cpu.interrupt_master_enable) service_interrupt(i);
+            if (cpu.interrupt_master_enable)
+                service_interrupt(i);
         }
     }
 }
@@ -66,7 +69,9 @@ u8 cpu_step(void) {
     return instr.cycles;
 }
 
-u8 fetch_byte(void) { return mem_read(cpu.reg.pc++); }
+u8 fetch_byte(void) {
+    return mem_read(cpu.reg.pc++);
+}
 u16 fetch_word(void) {
     u8 lo = fetch_byte();
     u8 hi = fetch_byte();

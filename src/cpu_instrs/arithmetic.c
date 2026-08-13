@@ -10,12 +10,22 @@ u8 add(u8 a, u8 b) {
     FLAG_WRITE(FLAG_C, result < a);
     return result;
 }
-void add_a_r8() { cpu.reg.a = add(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode))); }
-void add_a_n8() { cpu.reg.a = add(cpu.reg.a, fetch_byte()); }
+void add_a_r8() {
+    cpu.reg.a = add(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode)));
+}
+void add_a_n8() {
+    cpu.reg.a = add(cpu.reg.a, fetch_byte());
+}
 
-u8 adc(u8 a, u8 b) { return add(a, b + FLAG_IS_SET(FLAG_C)); }
-void adc_a_r8() { cpu.reg.a = adc(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode))); }
-void adc_a_n8() { cpu.reg.a = adc(cpu.reg.a, fetch_byte()); }
+u8 adc(u8 a, u8 b) {
+    return add(a, b + FLAG_IS_SET(FLAG_C));
+}
+void adc_a_r8() {
+    cpu.reg.a = adc(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode)));
+}
+void adc_a_n8() {
+    cpu.reg.a = adc(cpu.reg.a, fetch_byte());
+}
 
 u8 sub(u8 a, u8 b) {
     u8 result = a - b;
@@ -25,16 +35,32 @@ u8 sub(u8 a, u8 b) {
     FLAG_WRITE(FLAG_C, result > a);
     return result;
 }
-void sub_a_r8() { cpu.reg.a = sub(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode))); }
-void sub_a_n8() { cpu.reg.a = sub(cpu.reg.a, fetch_byte()); }
+void sub_a_r8() {
+    cpu.reg.a = sub(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode)));
+}
+void sub_a_n8() {
+    cpu.reg.a = sub(cpu.reg.a, fetch_byte());
+}
 
-u8 sbc(u8 a, u8 b) { return sub(a, b + FLAG_IS_SET(FLAG_C)); }
-void sbc_a_r8() { cpu.reg.a = sbc(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode))); }
-void sbc_a_n8() { cpu.reg.a = sbc(cpu.reg.a, fetch_byte()); }
+u8 sbc(u8 a, u8 b) {
+    return sub(a, b + FLAG_IS_SET(FLAG_C));
+}
+void sbc_a_r8() {
+    cpu.reg.a = sbc(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode)));
+}
+void sbc_a_n8() {
+    cpu.reg.a = sbc(cpu.reg.a, fetch_byte());
+}
 
-void cp(u8 a, u8 b) { u8 result __attribute__((unused)) = sub(a, b); }
-void cp_a_r8() { cp(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode))); }
-void cp_a_n8() { cp(cpu.reg.a, fetch_byte()); }
+void cp(u8 a, u8 b) {
+    u8 result __attribute__((unused)) = sub(a, b);
+}
+void cp_a_r8() {
+    cp(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode)));
+}
+void cp_a_n8() {
+    cp(cpu.reg.a, fetch_byte());
+}
 
 void inc_r8() {
     u8 r8_code = Y_OPERAND(cpu.opcode);

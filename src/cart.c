@@ -5,8 +5,12 @@
 
 cart_s cart;
 
-u32 get_rom_addr(u16 addr) { return (cart.rom_bank * ROM_BANK_SIZE) + (addr - ROM_BANK_SIZE); }
-u32 get_ram_addr(u16 addr) { return (cart.ram_bank * RAM_BANK_SIZE) + (addr - SRAM_START); }
+u32 get_rom_addr(u16 addr) {
+    return (cart.rom_bank * ROM_BANK_SIZE) + (addr - ROM_BANK_SIZE);
+}
+u32 get_ram_addr(u16 addr) {
+    return (cart.ram_bank * RAM_BANK_SIZE) + (addr - SRAM_START);
+}
 
 void cart_init() {
     strncpy(cart.title, (char*)(cart.rom + 0x134), 16);
@@ -144,7 +148,8 @@ void mbc1_configure(u16 addr, u8 val) {
     // Set lower 5bits of cart.rom_bank
     if (in_range(addr, 0x2000, 0x3FFF)) {
         u8 bank_n = val & 0x1F;
-        if (bank_n == 0) bank_n = 1;
+        if (bank_n == 0)
+            bank_n = 1;
         cart.rom_bank = (cart.rom_bank & 0xE0) | bank_n;
         return;
     }

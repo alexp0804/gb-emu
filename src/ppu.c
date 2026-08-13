@@ -17,27 +17,40 @@ u16 get_bg_win_tiledata_addr(u8 tile_id) {
 u16 get_bg_tilemap_addr(void) {
     return TEST_BIT(ppu.lcd_control, 3) ? BG_TILEMAP_ADDR_HI : BG_TILEMAP_ADDR_LO;
 }
-u8 get_obj_size(void) { return TEST_BIT(ppu.lcd_control, 2) ? 16 : 8; }
+u8 get_obj_size(void) {
+    return TEST_BIT(ppu.lcd_control, 2) ? 16 : 8;
+}
 
-bool obj_is_enabled(void) { return (bool)TEST_BIT(ppu.lcd_control, 1); }
-bool win_is_enabled(void) { return (bool)TEST_BIT(ppu.lcd_control, 5); };
-bool bg_is_enabled(void) { return (bool)TEST_BIT(ppu.lcd_control, 0); }
-bool ppu_is_enabled(void) { return (bool)TEST_BIT(ppu.lcd_control, 7); };
+bool obj_is_enabled(void) {
+    return (bool)TEST_BIT(ppu.lcd_control, 1);
+}
+bool win_is_enabled(void) {
+    return (bool)TEST_BIT(ppu.lcd_control, 5);
+};
+bool bg_is_enabled(void) {
+    return (bool)TEST_BIT(ppu.lcd_control, 0);
+}
+bool ppu_is_enabled(void) {
+    return (bool)TEST_BIT(ppu.lcd_control, 7);
+};
 
 void update_lcd_status() {
     ppu.lcd_status &= 0xFC;
     ppu.lcd_status |= ppu.mode;
 
     WRITE_BIT(ppu.lcd_status, 2, ppu.ly == ppu.lyc);
-    if (TEST_BIT(ppu.lcd_status, 2) && TEST_BIT(ppu.lcd_status, 6)) cpu_request_interrupt(INT_LCD);
+    if (TEST_BIT(ppu.lcd_status, 2) && TEST_BIT(ppu.lcd_status, 6))
+        cpu_request_interrupt(INT_LCD);
 }
 void set_mode(PPU_MODE_e mode) {
-    if (mode == ppu.mode) return;
+    if (mode == ppu.mode)
+        return;
 
     ppu.mode = mode;
     update_lcd_status();
 
-    if (mode == MODE_VBLANK) cpu_request_interrupt(INT_VBLANK);
+    if (mode == MODE_VBLANK)
+        cpu_request_interrupt(INT_VBLANK);
     if (mode != MODE_RENDERING && TEST_BIT((ppu.lcd_status >> 3), mode))
         cpu_request_interrupt(INT_LCD);
 }
@@ -67,7 +80,8 @@ void render_background() {
     }
 }
 void render_window() {
-    if (ppu.window_y > ppu.ly || ppu.window_x > SCREEN_WIDTH) return;
+    if (ppu.window_y > ppu.ly || ppu.window_x > SCREEN_WIDTH)
+        return;
     u16 win_tilemap_addr = get_win_tilemap_addr();
     u8 win_x = ppu.window_x - 7;
 
@@ -76,11 +90,13 @@ void render_window() {
     }
     ppu.wly++;
 }
-void render_objects() {}
+void render_objects() {
+}
 void render_scanline() {
     if (bg_is_enabled()) {
         render_background();
-        if (win_is_enabled()) render_window();
+        if (win_is_enabled())
+            render_window();
     }
     if (obj_is_enabled()) {
         render_objects();
@@ -96,19 +112,22 @@ void ppu_init(void) {
     };
 }
 void ppu_step(u8 cycles) {
-    if (!ppu_is_enabled()) return;
+    if (!ppu_is_enabled())
+        return;
 
     ppu.cycle_count += cycles;
 
     switch (ppu.mode) {
         case MODE_HBLANK:
-            if (ppu.cycle_count < HBLANK_DURATION) break;
+            if (ppu.cycle_count < HBLANK_DURATION)
+                break;
             ppu.cycle_count -= HBLANK_DURATION;
             ppu.ly++;
             set_mode(ppu.ly == 144 ? MODE_VBLANK : MODE_OAM_SCAN);
             break;
         case MODE_VBLANK:
-            if (ppu.cycle_count < VBLANK_DURATION) break;
+            if (ppu.cycle_count < VBLANK_DURATION)
+                break;
             ppu.cycle_count -= VBLANK_DURATION;
             ppu.ly++;
             if (ppu.ly > 153) {
@@ -118,12 +137,14 @@ void ppu_step(u8 cycles) {
             update_lcd_status();
             break;
         case MODE_OAM_SCAN:
-            if (ppu.cycle_count < OAM_SCAN_DURATION) break;
+            if (ppu.cycle_count < OAM_SCAN_DURATION)
+                break;
             ppu.cycle_count -= OAM_SCAN_DURATION;
             set_mode(MODE_RENDERING);
             break;
         case MODE_RENDERING:
-            if (ppu.cycle_count < RENDERING_DURATION) break;
+            if (ppu.cycle_count < RENDERING_DURATION)
+                break;
             ppu.cycle_count -= RENDERING_DURATION;
             update_lcd_status();
             render_scanline();
