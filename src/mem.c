@@ -5,6 +5,7 @@
 #include "cpu.h"
 #include "input.h"
 #include "ppu.h"
+#include "timer.h"
 
 mem_s mem;
 
@@ -85,6 +86,11 @@ u8 io_read(u16 addr) {
     switch (addr) {
         case JOYP_REG:
             return input_read();
+        case DIV_REG:
+        case TIMA_REG:
+        case TMA_REG:
+        case TAC_REG:
+            return timer_read(addr);
         case IF_REG:
             return cpu.interrupt_flag;
         case LCDC_REG:
@@ -117,6 +123,12 @@ void io_write(u16 addr, u8 val) {
     switch (addr) {
         case JOYP_REG:
             mem.io[JOYP_REG - IO_START] = val & 0x30;
+            break;
+        case DIV_REG:
+        case TIMA_REG:
+        case TMA_REG:
+        case TAC_REG:
+            timer_write(addr, val);
             break;
         case IF_REG:
             cpu.interrupt_flag = val;

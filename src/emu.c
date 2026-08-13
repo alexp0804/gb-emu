@@ -6,6 +6,7 @@
 #include "mem.h"
 #include "ppu.h"
 #include "renderer.h"
+#include "timer.h"
 
 const u32 cycles_per_frame = CLOCK_SPEED / FRAME_RATE;
 
@@ -23,6 +24,7 @@ void emu_step() {
     while (cycles_this_frame < cycles_per_frame) {
         u8 cycles = cpu_step();
         cycles_this_frame += cycles;
+        timer_step(cycles);
         ppu_step(cycles);
         cpu_handle_interrupts();
         input_step();
