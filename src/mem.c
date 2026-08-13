@@ -3,6 +3,7 @@
 #include "cart.h"
 #include "common.h"
 #include "cpu.h"
+#include "input.h"
 #include "ppu.h"
 
 mem_s mem;
@@ -82,8 +83,8 @@ static void dma_transfer(u8 val) {
 
 u8 io_read(u16 addr) {
     switch (addr) {
-        case 0xFF00:  // hardcode joypad to 0xCF for now.
-            return 0xCF;
+        case JOYP_REG:
+            return input_read();
         case IF_REG:
             return cpu.interrupt_flag;
         case LCDC_REG:
@@ -114,6 +115,9 @@ u8 io_read(u16 addr) {
 }
 void io_write(u16 addr, u8 val) {
     switch (addr) {
+        case JOYP_REG:
+            mem.io[JOYP_REG - IO_START] = val & 0x30;
+            break;
         case IF_REG:
             cpu.interrupt_flag = val;
             break;
@@ -135,7 +139,7 @@ void io_write(u16 addr, u8 val) {
         case LYC_REG:
             ppu.lyc = val;
             break;
-case DMA_REG:
+        case DMA_REG:
             dma_transfer(val);
             break;
         case BGP_REG:

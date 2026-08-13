@@ -2,6 +2,7 @@
 
 #include "cart.h"
 #include "cpu.h"
+#include "input.h"
 #include "mem.h"
 #include "ppu.h"
 #include "renderer.h"
@@ -24,6 +25,7 @@ void emu_step() {
         cycles_this_frame += cycles;
         ppu_step(cycles);
         cpu_handle_interrupts();
+        input_step();
     }
     renderer_step();
 }
