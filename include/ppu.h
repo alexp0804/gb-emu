@@ -8,6 +8,7 @@
 #define SCX_REG 0xFF43
 #define LY_REG 0xFF44
 #define LYC_REG 0xFF45
+#define DMA_REG 0xFF46
 #define BGP_REG 0xFF47
 #define OBP0_REG 0xFF48
 #define OBP1_REG 0xFF49

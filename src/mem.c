@@ -73,6 +73,13 @@ void mem_write(u16 addr, u8 val) {
     }
 }
 
+static void dma_transfer(u8 val) {
+    u16 src = val << 8;
+    for (int i = 0; i < OAM_END - OAM_START; i++) {
+        mem_write(OAM_START + i, mem_read(src + i));
+    }
+}
+
 u8 io_read(u16 addr) {
     switch (addr) {
         case 0xFF00:  // hardcode joypad to 0xCF for now.
@@ -127,6 +134,9 @@ void io_write(u16 addr, u8 val) {
             break;
         case LYC_REG:
             ppu.lyc = val;
+            break;
+case DMA_REG:
+            dma_transfer(val);
             break;
         case BGP_REG:
             ppu.bg_palette = val;
