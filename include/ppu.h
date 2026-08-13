@@ -22,7 +22,9 @@
 #define BGWIN_TILEDATA_ADDR_UNSIGNED 0x8000
 
 #define TILES_PER_BG_ROW 32
+#define BYTES_PER_TILE 16
 #define BYTES_PER_TILE_ROW 2
+#define OAM_ENTRIES 40
 
 #define HBLANK_DURATION 204
 #define VBLANK_DURATION 456
@@ -33,8 +35,17 @@ typedef enum PPU_MODE {
     MODE_HBLANK = 0,
     MODE_VBLANK,
     MODE_OAM_SCAN,
-    MODE_RENDERING,
+    MODE_PIXEL_TRANSFER,
 } PPU_MODE_e;
+
+typedef enum SPRITE_ATTR_BITS {
+    BEHIND_BG = 7,
+    FLIP_Y = 6,
+    FLIP_X = 5,
+    DMG_PALETTE = 4,
+    VRAM_BANK = 3,
+    // cgb_palette: 2,1,0
+} SPRITE_ATTR_BITS_e;
 
 typedef struct ppu {
     u8 lcd_control, lcd_status;
@@ -46,26 +57,18 @@ typedef struct ppu {
     u32 cycle_count;
 } ppu_s;
 
+typedef struct sprite {
+    u8 y, x, tile_index;
+    bool behind_bg, flip_y, flip_x, dmg_palette;
+    bool vram_bank;  // <- These two are unused in DMG
+    u8 cgb_palette;  // <-
+} sprite_s;
+
 extern ppu_s ppu;
+extern sprite_s oam[OAM_ENTRIES];
 u8 screen[SCREEN_WIDTH][SCREEN_HEIGHT];
 
-u16 get_win_tilemap_addr(void);
-u16 get_bg_win_tiledata_addr(u8 tile_id);
-u16 get_bg_tilemap_addr(void);
-u8 get_obj_size(void);
-
-bool obj_is_enabled(void);
-bool win_is_enabled(void);
-bool bg_is_enabled(void);
-bool ppu_is_enabled(void);
-
-void update_lcd_status();
-void set_mode(PPU_MODE_e mode);
-
-void render_background();
-void render_window();
-void render_objects();
-void render_scanline();
-
+bool ppu_vram_accessible(void);
+bool ppu_oam_accessible(void);
 void ppu_init(void);
 void ppu_step(u8 cycles);

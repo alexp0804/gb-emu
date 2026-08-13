@@ -13,7 +13,7 @@ typedef int8_t i8;
 typedef int16_t i16;
 typedef int32_t i32;
 
-#define TEST_BIT(val, bit) (((val & (1 << bit)) >> bit) == 1)
+#define TEST_BIT(val, bit) ((val >> bit) & 1)
 #define SET_BIT(val, bit) (val |= (1 << bit))
 #define CLEAR_BIT(val, bit) (val &= ~(1 << bit))
 #define WRITE_BIT(val, bit, cond) \

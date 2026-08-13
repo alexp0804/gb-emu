@@ -33,7 +33,7 @@ u8 mem_read(u16 addr) {
         return mem.wram[addr - ERAM_START];
     }
     if (in_range(addr, OAM_START, OAM_END)) {
-        return mem.io[addr - OAM_START];
+        return oam_read(addr);
     }
     if (in_range(addr, IO_START, IO_END)) {
         return io_read(addr);
@@ -50,7 +50,7 @@ void mem_write(u16 addr, u8 val) {
     if (in_range(addr, ROM_START, ROM_END) || in_range(addr, SRAM_START, SRAM_END)) {
         cart_write(addr, val);
     }
-    if (in_range(addr, VRAM_START, VRAM_END)) {
+    if (ppu_vram_accessible() && in_range(addr, VRAM_START, VRAM_END)) {
         mem.vram[addr - VRAM_START] = val;
     }
     if (in_range(addr, WRAM_START, WRAM_END)) {
@@ -59,8 +59,8 @@ void mem_write(u16 addr, u8 val) {
     if (in_range(addr, ERAM_START, ERAM_END)) {
         mem.wram[addr - ERAM_START] = val;
     }
-    if (in_range(addr, OAM_START, OAM_END)) {
-        mem.io[addr - OAM_START] = val;
+    if (ppu_oam_accessible() && in_range(addr, OAM_START, OAM_END)) {
+        oam_write(addr, val);
     }
     if (in_range(addr, IO_START, IO_END)) {
         io_write(addr, val);
@@ -146,5 +146,52 @@ void io_write(u16 addr, u8 val) {
         default:
             mem.io[addr - IO_START] = val;
             break;
+    }
+}
+
+u8 oam_read(u16 addr) {
+    u16 oam_addr = addr - OAM_START;
+    u16 oam_index = oam_addr / 4;
+    u16 oam_entry_index = oam_addr % 4;
+    sprite_s s = oam[oam_index];
+
+    switch (oam_entry_index) {
+        case 0:
+            return oam[oam_index].y;
+        case 1:
+            return oam[oam_index].x;
+        case 2:
+            return oam[oam_index].tile_index;
+        case 3:
+            return (s.behind_bg << BEHIND_BG) | (s.flip_y << FLIP_Y) | (s.flip_x << FLIP_X) |
+                   (s.dmg_palette << DMG_PALETTE) | (s.vram_bank << VRAM_BANK) |
+                   (s.cgb_palette & 0b111);
+    }
+    __builtin_unreachable();
+}
+void oam_write(u16 addr, u8 val) {
+    u16 oam_addr = addr - OAM_START;
+    u16 oam_index = oam_addr / 4;
+    u16 oam_entry_index = oam_addr % 4;
+
+    switch (oam_entry_index) {
+        case 0:
+            oam[oam_index].y = val;
+            return;
+        case 1:
+            oam[oam_index].x = val;
+            return;
+        case 2:
+            oam[oam_index].tile_index = val;
+            return;
+        case 3:
+            oam[oam_index].behind_bg = TEST_BIT(val, BEHIND_BG);
+            oam[oam_index].flip_y = TEST_BIT(val, FLIP_Y);
+            oam[oam_index].flip_x = TEST_BIT(val, FLIP_X);
+            oam[oam_index].dmg_palette = TEST_BIT(val, DMG_PALETTE);
+            // These are unused in DMG but setting anyway
+            oam[oam_index].vram_bank = TEST_BIT(val, VRAM_BANK);
+            oam[oam_index].cgb_palette = val & 0b111;
+            return;
     }
 }
