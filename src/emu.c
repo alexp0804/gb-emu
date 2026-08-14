@@ -21,12 +21,19 @@ void emu_deinit() {
 }
 void emu_step() {
     u32 cycles_this_frame = 0;
-    while (cycles_this_frame < cycles_per_frame) {
-        u8 cycles = cpu_step();
-        cycles_this_frame += cycles;
-        timer_step(cycles);
-        ppu_step(cycles);
-        cpu_handle_interrupts();
+    u32 start_ticks = SDL_GetTicks();
+
+    while (cycles_this_frame < cycles_per_frame ||
+           SDL_GetTicks() - start_ticks < (1.0f / FRAME_RATE) * 1000) {
+        bool ticking = cycles_this_frame < cycles_per_frame;
+
+        if (ticking) {
+            u8 cycles = cpu_step();
+            cycles_this_frame += cycles;
+            timer_step(cycles);
+            ppu_step(cycles);
+            cpu_handle_interrupts();
+        }
         input_step();
     }
     renderer_step();

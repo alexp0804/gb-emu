@@ -28,8 +28,8 @@ void renderer_init() {
         "Gameboy",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        SCREEN_WIDTH * 2,
-        SCREEN_HEIGHT * 2,
+        SCREEN_WIDTH * 5,
+        SCREEN_HEIGHT * 5,
         SDL_WINDOW_SHOWN
     );
 
