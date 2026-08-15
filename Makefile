@@ -6,7 +6,7 @@ SRC_DIR = src
 INCLUDE_DIR = include
 BUILD_DIR = build
 BIN_DIR = bin
-TARGET = $(BIN_DIR)/x
+TARGET = $(BIN_DIR)/gb-emu
 
 SRCS := $(shell find $(SRC_DIR) -name '*.c')
 OBJS := $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))

@@ -1,4 +1,4 @@
-roms/
+roms/*.gb
 bin/
 build/
 .vscode/
