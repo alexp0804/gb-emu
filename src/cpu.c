@@ -5,9 +5,6 @@
 
 cpu_s cpu;
 
-// Todo: in the case of branching instructions, cycle lengths may be different based on if the
-// condition for that instruction is met or not.
-
 void service_interrupt(interrupt_e i) {
     cpu.interrupt_master_enable = false;
     CLEAR_BIT(cpu.interrupt_flag, i);
@@ -62,11 +59,12 @@ void cpu_init(void) {
 }
 
 u8 cpu_step(void) {
+    cpu.extra_cycles = 0;
     cpu.opcode = mem_read(cpu.reg.pc++);
     instruction_s instr = decode_opcode();
     instr.execute();
 
-    return instr.cycles;
+    return instr.cycles + cpu.extra_cycles;
 }
 
 u8 fetch_byte(void) {
