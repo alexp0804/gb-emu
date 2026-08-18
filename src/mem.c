@@ -32,18 +32,25 @@ void mem_init() {
     for (int i = 0; i < 40; i++) {
         io_write(init_io_values[i].addr, init_io_values[i].value);
     }
+
     cart_init();
+
+    mem.cart = cart.rom;
+    mem.sram = cart.ram;
 }
 void mem_deinit() {
     cart_deinit();
 }
 
 u8 mem_read(u16 addr) {
-    if (in_range(addr, ROM_START, ROM_END) || in_range(addr, SRAM_START, SRAM_END)) {
-        return cart_read(addr);
+    if (in_range(addr, ROM_START, ROM_END)) {
+        return cart_rom_read(addr);
     }
     if (in_range(addr, VRAM_START, VRAM_END)) {
         return mem.vram[addr - VRAM_START];
+    }
+    if (in_range(addr, SRAM_START, SRAM_END)) {
+        return cart_ram_read(addr);
     }
     if (in_range(addr, WRAM_START, WRAM_END)) {
         return mem.wram[addr - WRAM_START];
@@ -66,11 +73,14 @@ u8 mem_read(u16 addr) {
     __builtin_unreachable();
 }
 void mem_write(u16 addr, u8 val) {
-    if (in_range(addr, ROM_START, ROM_END) || in_range(addr, SRAM_START, SRAM_END)) {
-        cart_write(addr, val);
+    if (in_range(addr, ROM_START, ROM_END)) {
+        cart_rom_write(addr, val);
     }
     if (ppu_vram_accessible() && in_range(addr, VRAM_START, VRAM_END)) {
         mem.vram[addr - VRAM_START] = val;
+    }
+    if (in_range(addr, SRAM_START, SRAM_END)) {
+        cart_ram_write(addr, val);
     }
     if (in_range(addr, WRAM_START, WRAM_END)) {
         mem.wram[addr - WRAM_START] = val;

@@ -19,9 +19,9 @@
 #define HRAM_END 0xFFFE
 
 typedef struct memory {
-    u8 cart[ROM_END - ROM_START + 1];
+    u8* cart;
     u8 vram[VRAM_END - VRAM_START + 1];
-    u8 sram[SRAM_END - SRAM_START + 1];
+    u8* sram;
     u8 wram[WRAM_END - WRAM_START + 1];
     u8 oam[OAM_END - OAM_START + 1];
     u8 io[IO_END - IO_START + 1];

@@ -1,9 +1,10 @@
 #pragma once
 #include "common.h"
 
-#define MAX_CART_ROM_SIZE 0x200000
 #define ROM_BANK_SIZE 0x4000
 #define RAM_BANK_SIZE 0x2000
+#define MAX_CART_ROM_SIZE ROM_BANK_SIZE * 128
+#define MAX_CART_RAM_SIZE RAM_BANK_SIZE * 16
 
 typedef enum MBC_TYPE {
     MBC_NONE,
@@ -17,13 +18,14 @@ typedef enum MBC_TYPE {
 } MBC_TYPE_e;
 
 typedef struct cart {
-    u8 rom[MAX_CART_ROM_SIZE];
-    u8* ram;
-    u8 n_rom_banks, rom_bank;
-    u8 n_ram_banks, ram_bank;
-    MBC_TYPE_e mbc_type;
-    bool ram_enabled, rom_banking_mode;
     char title[16 + 1];
+    u8 rom[MAX_CART_ROM_SIZE];
+    u8 ram[MAX_CART_RAM_SIZE];
+    MBC_TYPE_e mbc_type;
+    u8 n_rom_banks, n_ram_banks;
+    // MBC registers
+    u8 bank1, bank2;
+    bool mode, ram_enabled;
 } cart_s;
 
 extern cart_s cart;
@@ -31,8 +33,8 @@ extern cart_s cart;
 void cart_init(void);
 void cart_deinit(void);
 
-u8 cart_read(u16 addr);
-void cart_write(u16 addr, u8 val);
+u8 cart_rom_read(u16 addr);
+void cart_rom_write(u16 addr, u8 val);
 
-void mbc_configure(u16 addr, u8 val);
-void mbc1_configure(u16 addr, u8 val);
+u8 cart_ram_read(u16 addr);
+void cart_ram_write(u16 addr, u8 val);

@@ -46,6 +46,7 @@ Input is simply mapped to the keyboard.
 - STOP and HALT mode are unimplemented.
 - Audio remains unimplemented.
 - Cartridges with MBC types other than MBC1 are not supported.
+  - Multicartridge MBC1 cartridges are not supported.
 - Some specific quirks of the Gameboy remain unimplemented, like the OAM corruption bug, the HALT bug, and other small behaviors like the TIMA register getting the wrong value if TMA is updated on the same clock cycle.
 - Controller support.
 - Support for Gameboy Color games.
