@@ -80,6 +80,7 @@ static void render_window(void) {
 
     u16 win_tilemap_addr = get_win_tilemap_addr();
     u8 win_x = ppu.window_x - 7;
+    win_x = win_x > ppu.window_x ? 0 : win_x;
 
     for (int x = win_x; x < SCREEN_WIDTH; x++) {
         screen[x][ppu.ly] = get_bg_win_color(win_tilemap_addr, x - win_x, ppu.wly);
