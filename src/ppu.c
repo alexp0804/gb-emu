@@ -127,13 +127,13 @@ static void render_objects(void) {
         u8 data_hi = mem_read(tile_addr + pixel_y * BYTES_PER_TILE_ROW + 1);
 
         for (u8 x = 0; x < 8; x++) {
+            if (sprite_x + x >= SCREEN_WIDTH)
+                continue;
+
             u8 pixel_x = sprite.flip_x ? x : (7 - x);
             u8 color_id = get_color_id(data_lo, data_hi, pixel_x);
             u8 color = get_palette_color(color_id,
                                          sprite.dmg_palette ? ppu.obj_palette1 : ppu.obj_palette0);
-
-            if (sprite_x + pixel_x >= SCREEN_WIDTH)
-                continue;
 
             if (color_id == 0)
                 continue;
