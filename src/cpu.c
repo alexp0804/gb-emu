@@ -35,6 +35,10 @@ void cpu_request_interrupt(interrupt_e i) {
     SET_BIT(cpu.interrupt_flag, i);
 }
 void cpu_handle_interrupts() {
+    if ((cpu.interrupt_enable & cpu.interrupt_flag) == 0) {
+        return;
+    }
+    cpu.halted = false;
     for (interrupt_e i = INT_VBLANK; i <= INT_JOYPAD; i++) {
         if (TEST_BIT(cpu.interrupt_flag, i) && TEST_BIT(cpu.interrupt_enable, i)) {
             if (cpu.interrupt_master_enable)
@@ -56,9 +60,13 @@ void cpu_init(void) {
         .pc = 0x0100,
         .sp = 0xfffe,
     };
+    cpu.halted = false;
 }
 
 u8 cpu_step(void) {
+    if (cpu.halted) {
+        return 4;
+    }
     cpu.extra_cycles = 0;
     cpu.opcode = mem_read(cpu.reg.pc++);
     instruction_s instr = decode_opcode();

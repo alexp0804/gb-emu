@@ -52,6 +52,7 @@ typedef struct cpu {
     u8 opcode;
     u8 interrupt_flag, interrupt_enable;
     bool interrupt_master_enable;
+    bool halted;
     u8 extra_cycles;
 } cpu_s;
 

@@ -11,5 +11,5 @@ void ei() {
 }
 
 void halt() {
-    // TODO
+    cpu.halted = true;
 }
