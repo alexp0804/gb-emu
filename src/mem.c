@@ -180,6 +180,7 @@ void io_write(u16 addr, u8 val) {
             break;
         case DMA_REG:
             dma_transfer(val);
+            mem.io[addr - IO_START] = val;
             break;
         case BGP_REG:
             ppu.bg_palette = val;
