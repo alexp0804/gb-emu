@@ -104,7 +104,7 @@ void mem_write(u16 addr, u8 val) {
 
 static void dma_transfer(u8 val) {
     u16 src = val << 8;
-    for (int i = 0; i < OAM_END - OAM_START; i++) {
+    for (int i = 0; i < OAM_END - OAM_START + 1; i++) {
         mem_write(OAM_START + i, mem_read(src + i));
     }
 }
