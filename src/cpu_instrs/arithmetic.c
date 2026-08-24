@@ -2,23 +2,23 @@
 #include "cpu.h"
 #include "cpu_impl.h"
 
-u8 add(u8 a, u8 b) {
-    u8 result = a + b;
-    FLAG_WRITE(FLAG_Z, result == 0);
+u8 add(u8 a, u8 b, u8 c) {
+    u16 result = a + b + c;
+    FLAG_WRITE(FLAG_Z, (result & 0xFF) == 0);
     FLAG_CLEAR(FLAG_N);
-    FLAG_WRITE(FLAG_H, (a & 0x0F) + (b & 0x0F) >= 0x10);
-    FLAG_WRITE(FLAG_C, result < a);
-    return result;
+    FLAG_WRITE(FLAG_H, (a & 0xF) + (b & 0xF) + c > 0xF);
+    FLAG_WRITE(FLAG_C, result > 0xFF);
+    return result & 0xFF;
 }
 void add_a_r8() {
-    cpu.reg.a = add(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode)));
+    cpu.reg.a = add(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode)), 0);
 }
 void add_a_n8() {
-    cpu.reg.a = add(cpu.reg.a, fetch_byte());
+    cpu.reg.a = add(cpu.reg.a, fetch_byte(), 0);
 }
 
 u8 adc(u8 a, u8 b) {
-    return add(a, b + FLAG_IS_SET(FLAG_C));
+    return add(a, b, FLAG_IS_SET(FLAG_C));
 }
 void adc_a_r8() {
     cpu.reg.a = adc(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode)));
@@ -27,23 +27,23 @@ void adc_a_n8() {
     cpu.reg.a = adc(cpu.reg.a, fetch_byte());
 }
 
-u8 sub(u8 a, u8 b) {
-    u8 result = a - b;
+u8 sub(u8 a, u8 b, u8 c) {
+    u8 result = a - b - c;
     FLAG_WRITE(FLAG_Z, result == 0);
     FLAG_SET(FLAG_N);
-    FLAG_WRITE(FLAG_H, (a & 0x0F) < (b & 0x0F));
-    FLAG_WRITE(FLAG_C, result > a);
+    FLAG_WRITE(FLAG_H, (a & 0xF) < (b & 0xF) + c);
+    FLAG_WRITE(FLAG_C, a < b + c);
     return result;
 }
 void sub_a_r8() {
-    cpu.reg.a = sub(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode)));
+    cpu.reg.a = sub(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode)), 0);
 }
 void sub_a_n8() {
-    cpu.reg.a = sub(cpu.reg.a, fetch_byte());
+    cpu.reg.a = sub(cpu.reg.a, fetch_byte(), 0);
 }
 
 u8 sbc(u8 a, u8 b) {
-    return sub(a, b + FLAG_IS_SET(FLAG_C));
+    return sub(a, b, FLAG_IS_SET(FLAG_C));
 }
 void sbc_a_r8() {
     cpu.reg.a = sbc(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode)));
@@ -53,7 +53,7 @@ void sbc_a_n8() {
 }
 
 void cp(u8 a, u8 b) {
-    u8 result __attribute__((unused)) = sub(a, b);
+    u8 result __attribute__((unused)) = sub(a, b, 0);
 }
 void cp_a_r8() {
     cp(cpu.reg.a, read_r8_operand(Z_OPERAND(cpu.opcode)));
@@ -65,14 +65,14 @@ void cp_a_n8() {
 void inc_r8() {
     u8 r8_code = Y_OPERAND(cpu.opcode);
     u8 c = FLAG_IS_SET(FLAG_C);
-    u8 result = add(read_r8_operand(r8_code), 1);
+    u8 result = add(read_r8_operand(r8_code), 1, 0);
     FLAG_WRITE(FLAG_C, c);  // This instr shouldn't modify C flag, but add() does.
     write_r8_operand(r8_code, result);
 }
 void dec_r8() {
     u8 r8_code = Y_OPERAND(cpu.opcode);
     u8 c = FLAG_IS_SET(FLAG_C);
-    u8 result = sub(read_r8_operand(r8_code), 1);
+    u8 result = sub(read_r8_operand(r8_code), 1, 0);
     FLAG_WRITE(FLAG_C, c);  // This instr shouldn't modify FLAG_C, but sub() does.
     write_r8_operand(r8_code, result);
 }
