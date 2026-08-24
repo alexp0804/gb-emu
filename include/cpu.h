@@ -51,8 +51,8 @@ typedef struct cpu {
     reg_s reg;
     u8 opcode;
     u8 interrupt_flag, interrupt_enable;
-    bool interrupt_master_enable;
-    bool halted;
+    bool interrupt_master_enable, request_interrupt_master_enable;
+    bool halted, stopped;
     u8 extra_cycles;
 } cpu_s;
 

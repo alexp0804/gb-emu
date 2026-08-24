@@ -33,7 +33,7 @@ void noop() {
 }
 
 void stop() {
-    // TODO
+    cpu.stopped = true;
 }
 
 void ccf() {

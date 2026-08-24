@@ -7,7 +7,7 @@ void di() {
 }
 
 void ei() {
-    cpu.interrupt_master_enable = true;
+    cpu.request_interrupt_master_enable = true;
 }
 
 void halt() {

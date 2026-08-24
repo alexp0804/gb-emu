@@ -60,15 +60,20 @@ void cpu_init(void) {
         .pc = 0x0100,
         .sp = 0xfffe,
     };
-    cpu.halted = false;
+    cpu.halted = cpu.stopped = false;
+    cpu.request_interrupt_master_enable = false;
 }
 
 u8 cpu_step(void) {
-    if (cpu.halted) {
+    if (cpu.halted || cpu.stopped) {
         return 4;
     }
+    if (cpu.request_interrupt_master_enable) {
+        cpu.request_interrupt_master_enable = false;
+        cpu.interrupt_master_enable = true;
+    }
     cpu.extra_cycles = 0;
-    cpu.opcode = mem_read(cpu.reg.pc++);
+    cpu.opcode = fetch_byte();
     instruction_s instr = decode_opcode();
     instr.execute();
 

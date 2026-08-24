@@ -51,7 +51,7 @@ void ret_cond() {
     }
 }
 void reti() {
-    ei();
+    cpu.interrupt_master_enable = true;
     ret();
 }
 
