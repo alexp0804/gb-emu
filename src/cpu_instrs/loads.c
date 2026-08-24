@@ -21,7 +21,9 @@ void ld_a_at_r16mem() {
 }
 
 void ld_at_n16_sp() {
-    mem_write(fetch_word(), cpu.reg.sp);
+    u16 addr = fetch_word();
+    mem_write(addr, cpu.reg.sp & 0xFF);
+    mem_write(addr + 1, (cpu.reg.sp & 0xFF00) >> 8);
 }
 void ld_at_n16_a() {
     mem_write(fetch_word(), cpu.reg.a);
