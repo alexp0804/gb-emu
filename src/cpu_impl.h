@@ -132,9 +132,13 @@ void ei(void);
 void halt(void);
 
 void rl_r8(void);
+void rla(void);
 void rlc_r8(void);
+void rlca(void);
 void rr_r8(void);
+void rra(void);
 void rrc_r8(void);
+void rrca(void);
 void sla_r8(void);
 void sra_r8(void);
 void srl_r8(void);

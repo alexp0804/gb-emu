@@ -49,18 +49,30 @@ void rl_r8() {
     u8 r8 = read_r8_operand(r8_code);
     u8 bit7 = r8 >> 7;
     u8 new_bit0 = FLAG_IS_SET(FLAG_C);
+    u8 result = (r8 << 1) | new_bit0;
     FLAG_WRITE(FLAG_C, bit7);
-    FLAG_CLEAR(FLAG_Z | FLAG_N | FLAG_H);
-    write_r8_operand(r8_code, (r8 << 1) | new_bit0);
+    FLAG_WRITE(FLAG_Z, result == 0);
+    FLAG_CLEAR(FLAG_N | FLAG_H);
+    write_r8_operand(r8_code, result);
+}
+void rla() {
+    rl_r8();
+    FLAG_CLEAR(FLAG_Z);
 }
 
 void rlc_r8() {
     u8 r8_code = Z_OPERAND(cpu.opcode);
     u8 r8 = read_r8_operand(r8_code);
     u8 bit7 = r8 >> 7;
+    u8 result = (r8 << 1) | bit7;
     FLAG_WRITE(FLAG_C, bit7);
-    FLAG_CLEAR(FLAG_Z | FLAG_N | FLAG_H);
-    write_r8_operand(r8_code, (r8 << 1) | bit7);
+    FLAG_WRITE(FLAG_Z, result == 0);
+    FLAG_CLEAR(FLAG_N | FLAG_H);
+    write_r8_operand(r8_code, result);
+}
+void rlca() {
+    rlc_r8();
+    FLAG_CLEAR(FLAG_Z);
 }
 
 void rr_r8() {
@@ -68,18 +80,30 @@ void rr_r8() {
     u8 r8 = read_r8_operand(r8_code);
     u8 bit0 = r8 & 1;
     u8 new_bit7 = FLAG_IS_SET(FLAG_C);
+    u8 result = (r8 >> 1) | (new_bit7 << 7);
     FLAG_WRITE(FLAG_C, bit0);
-    FLAG_CLEAR(FLAG_Z | FLAG_N | FLAG_H);
-    write_r8_operand(r8_code, (r8 >> 1) | (new_bit7 << 7));
+    FLAG_WRITE(FLAG_Z, result == 0);
+    FLAG_CLEAR(FLAG_N | FLAG_H);
+    write_r8_operand(r8_code, result);
+}
+void rra() {
+    rr_r8();
+    FLAG_CLEAR(FLAG_Z);
 }
 
 void rrc_r8() {
     u8 r8_code = Z_OPERAND(cpu.opcode);
     u8 r8 = read_r8_operand(r8_code);
     u8 bit0 = r8 & 1;
+    u8 result = (r8 >> 1) | (bit0 << 7);
     FLAG_WRITE(FLAG_C, bit0);
-    FLAG_CLEAR(FLAG_Z | FLAG_N | FLAG_H);
-    write_r8_operand(r8_code, (r8 >> 1) | (bit0 << 7));
+    FLAG_WRITE(FLAG_Z, result == 0);
+    FLAG_CLEAR(FLAG_N | FLAG_H);
+    write_r8_operand(r8_code, result);
+}
+void rrca() {
+    rrc_r8();
+    FLAG_CLEAR(FLAG_Z);
 }
 
 void sla_r8() {
