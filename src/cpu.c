@@ -10,8 +10,8 @@ static void debug_log_cpu_state(void) {
         return;
 
     printf(
-        "A:%02X F:%02X B:%02X C:%02X D:%02X E:%02X H:%02X L:%02X SP:%04X PC:%04X "
-        "PCMEM:%02X,%02X,%02X,%02X\n",
+        "A: %02X F: %02X B: %02X C: %02X D: %02X E: %02X H: %02X L: %02X SP: %04X PC: 00:%04X "
+        "(%02X %02X %02X %02X)\n",
         cpu.reg.a, cpu.reg.f, cpu.reg.b, cpu.reg.c, cpu.reg.d, cpu.reg.e, cpu.reg.h, cpu.reg.l,
         cpu.reg.sp, cpu.reg.pc, mem_read(cpu.reg.pc), mem_read(cpu.reg.pc + 1),
         mem_read(cpu.reg.pc + 2), mem_read(cpu.reg.pc + 3));
@@ -19,9 +19,10 @@ static void debug_log_cpu_state(void) {
     // getchar();
 }
 
-void service_interrupt(interrupt_e i) {
+static void service_interrupt(interrupt_e i) {
     cpu.interrupt_master_enable = false;
     CLEAR_BIT(cpu.interrupt_flag, i);
+    cpu.extra_cycles += 2;
 
     push_word(cpu.reg.pc);
 
@@ -45,26 +46,30 @@ void service_interrupt(interrupt_e i) {
             __builtin_unreachable();
     }
 }
-void cpu_request_interrupt(interrupt_e i) {
-    SET_BIT(cpu.interrupt_flag, i);
-}
-void cpu_handle_interrupts() {
-    if ((cpu.interrupt_enable & cpu.interrupt_flag) == 0) {
+
+static void handle_interrupts() {
+    u8 interrupts = cpu.interrupt_enable & cpu.interrupt_flag;
+    if (interrupts == 0) {
         return;
     }
     cpu.halted = false;
+
     for (interrupt_e i = INT_VBLANK; i <= INT_JOYPAD; i++) {
-        if (TEST_BIT(cpu.interrupt_flag, i) && TEST_BIT(cpu.interrupt_enable, i)) {
-            if (cpu.interrupt_master_enable)
-                service_interrupt(i);
+        if (TEST_BIT(interrupts, i) && cpu.interrupt_master_enable) {
+            service_interrupt(i);
+            break;
         }
     }
+}
+
+void cpu_request_interrupt(interrupt_e i) {
+    SET_BIT(cpu.interrupt_flag, i);
 }
 
 void cpu_init(void) {
     cpu.reg = (reg_s){
         .a = 0x01,
-        .f = 0x80,
+        .f = 0xB0,
         .b = 0x00,
         .c = 0x13,
         .d = 0x00,
@@ -75,20 +80,17 @@ void cpu_init(void) {
         .sp = 0xfffe,
     };
     cpu.halted = cpu.stopped = false;
-    cpu.request_interrupt_master_enable = false;
 }
 
 u8 cpu_step(void) {
+    cpu.extra_cycles = 0;
+    handle_interrupts();
     if (cpu.halted || cpu.stopped) {
-        return 4;
+        return 1;
     }
-    if (cpu.request_interrupt_master_enable) {
-        cpu.request_interrupt_master_enable = false;
-        cpu.interrupt_master_enable = true;
-    }
+
     debug_log_cpu_state();
 
-    cpu.extra_cycles = 0;
     cpu.opcode = fetch_byte();
     instruction_s instr = decode_opcode();
     instr.execute();

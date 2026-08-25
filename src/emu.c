@@ -14,6 +14,7 @@ void emu_init() {
     renderer_init();
     cpu_init();
     mem_init();
+    ppu_init();
 }
 void emu_deinit() {
     renderer_deinit();
@@ -32,7 +33,6 @@ void emu_step() {
             cycles_this_frame += cycles;
             timer_step(cycles);
             ppu_step(cycles);
-            cpu_handle_interrupts();
         }
         input_step();
     }

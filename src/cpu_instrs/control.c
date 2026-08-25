@@ -12,7 +12,7 @@ void jp_cond_n16() {
     u16 n16 = fetch_word();
     if (condition_met(R_OPERAND(cpu.opcode))) {
         cpu.reg.pc = n16;
-        cpu.extra_cycles = 1;
+        cpu.extra_cycles += 1;
     }
 }
 
@@ -23,7 +23,7 @@ void jr_cond_d8() {
     i8 d8 = (i8)fetch_byte();
     if (condition_met(R_OPERAND(cpu.opcode))) {
         cpu.reg.pc += d8;
-        cpu.extra_cycles = 1;
+        cpu.extra_cycles += 1;
     }
 }
 
@@ -37,7 +37,7 @@ void call_cond_n16() {
     if (condition_met(R_OPERAND(cpu.opcode))) {
         push_word(cpu.reg.pc);
         cpu.reg.pc = d16;
-        cpu.extra_cycles = 3;
+        cpu.extra_cycles += 3;
     }
 }
 
@@ -47,7 +47,7 @@ void ret() {
 void ret_cond() {
     if (condition_met(R_OPERAND(cpu.opcode))) {
         ret();
-        cpu.extra_cycles = 3;
+        cpu.extra_cycles += 3;
     }
 }
 void reti() {

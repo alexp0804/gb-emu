@@ -51,7 +51,7 @@ typedef struct cpu {
     reg_s reg;
     u8 opcode;
     u8 interrupt_flag, interrupt_enable;
-    bool interrupt_master_enable, request_interrupt_master_enable;
+    bool interrupt_master_enable;
     bool halted, stopped;
     u8 extra_cycles;
 } cpu_s;
@@ -59,6 +59,5 @@ typedef struct cpu {
 extern cpu_s cpu;
 
 void cpu_request_interrupt(interrupt_e i);
-void cpu_handle_interrupts();
 void cpu_init(void);
 u8 cpu_step(void);

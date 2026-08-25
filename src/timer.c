@@ -59,11 +59,12 @@ static void div_step(u8 cycles) {
     }
 }
 static void tima_step(u8 cycles) {
-    timer.cycles_since_tima_tick += cycles;
     if (!timer.clock_enable)
         return;
 
-    u16 period = clock_select_values[timer.clock_select];
+    timer.cycles_since_tima_tick += cycles;
+
+    u16 period = timer_select_values[timer.clock_select];
     while (timer.cycles_since_tima_tick >= period) {
         timer.cycles_since_tima_tick -= period;
         timer.tima++;

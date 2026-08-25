@@ -6,7 +6,7 @@
 #define TMA_REG 0xFF06
 #define TAC_REG 0xFF07
 
-const u16 clock_select_values[4];
+const u16 timer_select_values[4];
 
 typedef struct timer {
     u8 div, tma, tima;
