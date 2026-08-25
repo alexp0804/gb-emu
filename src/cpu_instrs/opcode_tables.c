@@ -12,7 +12,7 @@ instruction_s decode_opcode() {
 
 // clang-format off
 const instruction_s instruction_table[256] = {
-    [0x00] = {"nop", 0, 0, noop},       
+    [0x00] = {"nop", 1, 1, noop},       
     [0x01] = {"LD BC, n16", 3, 3, ld_r16_n16},
     [0x02] = {"LD (BC), A", 1, 2, ld_at_r16mem_a},
     [0x03] = {"INC BC", 1, 2, inc_r16},
