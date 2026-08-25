@@ -4,6 +4,7 @@ A gameboy emulator written in C.
 TODO: update with screenshots of games that work.
 
 ## Features
+- Accurate timing at the instruction level. Passing all of Blargg's `cpu_instr` and `instr_timing` tests.
 - Scanline based PPU rendering, passing all of [dmg-acid2](https://github.com/mattcurrie/dmg-acid2) tests.
 - Supports cartridges with MBC1 <!-- and MBC3 --> memory bank controllers.
 
@@ -43,10 +44,9 @@ Input is simply mapped to the keyboard.
 
 
 ## Limitations and future improvements
-- STOP and HALT mode are unimplemented.
-- Audio remains unimplemented.
+- The emulator is lacking an audio implementation.
 - Cartridges with MBC types other than MBC1 are not supported.
   - Multicartridge MBC1 cartridges are not supported.
 - Some specific quirks of the Gameboy remain unimplemented, like the OAM corruption bug, the HALT bug, and other small behaviors like the TIMA register getting the wrong value if TMA is updated on the same clock cycle.
 - Controller support.
-- Support for Gameboy Color games.
+- A Gameboy Color mode.
