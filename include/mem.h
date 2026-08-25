@@ -18,6 +18,8 @@
 #define HRAM_START 0xFF80
 #define HRAM_END 0xFFFE
 
+#define SB_REG 0xFF01
+
 typedef struct memory {
     u8* cart;
     u8 vram[VRAM_END - VRAM_START + 1];

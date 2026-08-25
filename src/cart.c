@@ -121,9 +121,11 @@ void cart_init() {
     cart.mode = 0b0;
     cart.ram_enabled = false;
 
-    printf("Loaded %s with MBC type %d\n", cart.title, cart.mbc_type);
-    printf("ROM size: %d bytes\n", cart.n_rom_banks * ROM_BANK_SIZE);
-    printf("# of ROM Banks: %d\n# of RAM Banks: %d\n", cart.n_rom_banks, cart.n_ram_banks);
+    if (!debug) {
+        printf("Loaded %s with MBC type %d\n", cart.title, cart.mbc_type);
+        printf("ROM size: %d bytes\n", cart.n_rom_banks * ROM_BANK_SIZE);
+        printf("# of ROM Banks: %d\n# of RAM Banks: %d\n", cart.n_rom_banks, cart.n_ram_banks);
+    }
 }
 void cart_deinit() {
 }

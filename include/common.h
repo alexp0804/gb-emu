@@ -26,3 +26,6 @@ typedef int32_t i32;
 
 #define SCREEN_WIDTH 160
 #define SCREEN_HEIGHT 144
+
+extern bool debug;
+extern bool log_sb;

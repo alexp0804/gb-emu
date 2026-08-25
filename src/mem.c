@@ -198,6 +198,9 @@ void io_write(u16 addr, u8 val) {
             ppu.window_x = val;
             break;
         default:
+            if (addr == SB_REG && log_sb) {
+                fputc(val, stdout);
+            }
             mem.io[addr - IO_START] = val;
             break;
     }

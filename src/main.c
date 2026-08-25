@@ -2,17 +2,21 @@
 #include <stdio.h>
 
 #include "emu.h"
+bool debug = false;
+bool log_sb = true;
 
 int main(int argc, char* argv[]) {
     SDL_Event event;
     bool running = true;
-    char* rom_file = "Tetris.gb";
 
-    if (argc == 2) {
-        rom_file = argv[1];
+    if (argc >= 2) {
+        if (!read_rom_file(argv[1])) {
+            return 1;
+        }
     }
-    if (!read_rom_file(rom_file)) {
-        return 1;
+    if (argc >= 3) {
+        debug = strcmp(argv[2], "--debug") == 0;
+        log_sb = !debug;
     }
 
     emu_init();

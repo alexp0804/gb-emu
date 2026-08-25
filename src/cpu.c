@@ -5,6 +5,20 @@
 
 cpu_s cpu;
 
+static void debug_log_cpu_state(void) {
+    if (!debug)
+        return;
+
+    printf(
+        "A:%02X F:%02X B:%02X C:%02X D:%02X E:%02X H:%02X L:%02X SP:%04X PC:%04X "
+        "PCMEM:%02X,%02X,%02X,%02X\n",
+        cpu.reg.a, cpu.reg.f, cpu.reg.b, cpu.reg.c, cpu.reg.d, cpu.reg.e, cpu.reg.h, cpu.reg.l,
+        cpu.reg.sp, cpu.reg.pc, mem_read(cpu.reg.pc), mem_read(cpu.reg.pc + 1),
+        mem_read(cpu.reg.pc + 2), mem_read(cpu.reg.pc + 3));
+
+    // getchar();
+}
+
 void service_interrupt(interrupt_e i) {
     cpu.interrupt_master_enable = false;
     CLEAR_BIT(cpu.interrupt_flag, i);
@@ -72,6 +86,8 @@ u8 cpu_step(void) {
         cpu.request_interrupt_master_enable = false;
         cpu.interrupt_master_enable = true;
     }
+    debug_log_cpu_state();
+
     cpu.extra_cycles = 0;
     cpu.opcode = fetch_byte();
     instruction_s instr = decode_opcode();
